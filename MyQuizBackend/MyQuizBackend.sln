@@ -3,14 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1C2F2BDC-CCD7-42B1-B3F3-D07F8D32FD59}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{060E79F4-4164-4ED6-9E0C-9AEE5A0546D0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96022080-C4D0-48C8-8E78-1A05F27BD17E}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MyQuizBackend", "src\MyQuizBackend\MyQuizBackend.xproj", "{20854BBD-9EF4-4C37-A184-D93604A72672}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MyQuizBackend", "src\MYVote\MyQuizBackend.xproj", "{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,15 +13,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{20854BBD-9EF4-4C37-A184-D93604A72672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20854BBD-9EF4-4C37-A184-D93604A72672}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20854BBD-9EF4-4C37-A184-D93604A72672}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20854BBD-9EF4-4C37-A184-D93604A72672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{20854BBD-9EF4-4C37-A184-D93604A72672} = {1C2F2BDC-CCD7-42B1-B3F3-D07F8D32FD59}
+		{33BA6E3D-E7B5-40E5-B2F0-E1414AAC07D7} = {060E79F4-4164-4ED6-9E0C-9AEE5A0546D0}
 	EndGlobalSection
 EndGlobal
