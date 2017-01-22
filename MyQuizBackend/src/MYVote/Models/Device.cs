@@ -10,11 +10,5 @@ namespace MYVote.Models
         [Column("ID")]
         public long Id { get; set; }
         public string PushUpToken { get; set; }
-
-        [InverseProperty("DeviceNavigation")]
-        public virtual DeviceGroup DeviceGroup { get; set; }
-        [ForeignKey("Id")]
-        [InverseProperty("Device")]
-        public virtual DeviceGroup IdNavigation { get; set; }
     }
 }

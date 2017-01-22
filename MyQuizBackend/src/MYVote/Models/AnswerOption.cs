@@ -12,16 +12,5 @@ namespace MYVote.Models
         public string Text { get; set; }
         [Column("True/False")]
         public string TrueFalse { get; set; }
-
-        [InverseProperty("AnswerOptionNavigation")]
-        public virtual AnswerOptionGivenAnswer AnswerOptionGivenAnswer { get; set; }
-        [InverseProperty("AnswerOptionNavigation")]
-        public virtual QuestionAnswerOption QuestionAnswerOption { get; set; }
-        [ForeignKey("Id")]
-        [InverseProperty("AnswerOption")]
-        public virtual AnswerOptionGivenAnswer IdNavigation { get; set; }
-        [ForeignKey("Id")]
-        [InverseProperty("AnswerOption")]
-        public virtual QuestionAnswerOption Id1 { get; set; }
     }
 }

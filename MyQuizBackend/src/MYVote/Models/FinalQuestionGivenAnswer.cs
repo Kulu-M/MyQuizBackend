@@ -13,12 +13,5 @@ namespace MYVote.Models
         public long FinalQuestionId { get; set; }
         [Column("GivenAnswerID")]
         public long GivenAnswerId { get; set; }
-
-        [ForeignKey("FinalQuestionId")]
-        [InverseProperty("FinalQuestionGivenAnswer")]
-        public virtual FinalQuestion FinalQuestion { get; set; }
-        [ForeignKey("GivenAnswerId")]
-        [InverseProperty("FinalQuestionGivenAnswer")]
-        public virtual GivenAnswer GivenAnswer { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace MYVote.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlite(@"Datasource=C:\Users\marhei\Documents\Visual_Studio_2015\Projects\MYVote\MYVote\src\MYVote\Database\MYVoteDB_Final.db");
+            optionsBuilder.UseSqlite(@"Datasource=C:\Users\marhei\Documents\Visual Studio 2015\Projects\MyQuizBackend-master\MyQuizBackend-master\MyQuizBackend\src\MYVote\Database\MYVoteDB_Final.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

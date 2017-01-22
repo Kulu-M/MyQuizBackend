@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MYVote.Models;
 
 namespace MYVote.Controllers
 {
@@ -13,6 +14,28 @@ namespace MYVote.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            using (var db = new APIVoteDbContext())
+            {
+                var device = new Device();
+                device.Id = 1;
+                device.PushUpToken = "First Device";
+                db.Device.Add(device);
+
+                var group = new Group();
+                group.Id = 1;
+                group.Title = "First Title Test";
+                group.Topic = 1;
+                group.EnterGroupPin = 12345;
+                db.Group.Add(group);
+
+                var deviceGroup = new DeviceGroup();
+                deviceGroup.DeviceId = device.Id;
+                deviceGroup.GroupId = group.Id;
+                db.DeviceGroup.Add(deviceGroup);
+                
+                db.SaveChanges();
+
+            }
             return new string[] { "value1", "value2" };
         }
 
