@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -8,8 +10,10 @@ namespace MYVote.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVoteDB_Final.db");
+
             #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlite(@"Datasource=C:\Users\marhei\Documents\Visual Studio 2015\Projects\MyQuizBackend-master\MyQuizBackend-master\MyQuizBackend\src\MYVote\Database\MYVoteDB_Final.db");
+            optionsBuilder.UseSqlite(@"Datasource=" + path);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

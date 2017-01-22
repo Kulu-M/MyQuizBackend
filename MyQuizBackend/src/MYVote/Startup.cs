@@ -12,6 +12,8 @@ namespace MYVote
 {
     public class Startup
     {
+        public static IHostingEnvironment _iHostingEnv;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -20,6 +22,7 @@ namespace MYVote
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            _iHostingEnv = env;
         }
 
         public IConfigurationRoot Configuration { get; }
