@@ -30,11 +30,20 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        // GET api/groups/5
-        [HttpGet("{id}")]
+        // GET api/groups/id/topics
+        [HttpGet("{id}/topics")]
         public string Get(int id)
         {
-            return "";
+            JsonSerializer serializer = new JsonSerializer();
+
+            using (var db = new APIVoteDbContext())
+            {
+                var topics = (from x in db.Topic select x);
+                //groups = db.Group.First(g => g.Id >= 1);
+
+                return JsonConvert.SerializeObject(topics);
+
+            }
 
         }
 
@@ -42,6 +51,24 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+
+        }
+
+        [HttpPost("{id}/topics")]
+        public void Post(int id)
+        {
+            using (var db = new APIVoteDbContext())
+            {
+                var topics = new Topic();
+                topics.Id = 1;
+                topics.Name = "";
+
+                db.Topic.Add(topics);
+
+                db.SaveChanges();
+
+
+            }
         }
 
         // PUT api/groups/5
