@@ -43,7 +43,7 @@ namespace MYVote.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            return "Working";
         }
 
         // POST api/values
