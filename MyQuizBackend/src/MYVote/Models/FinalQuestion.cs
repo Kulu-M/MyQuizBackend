@@ -8,6 +8,7 @@ namespace MYVote.Models
     public partial class FinalQuestion
     {
         [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public long? QuestionBlock { get; set; }
         [Column("GroupID")]

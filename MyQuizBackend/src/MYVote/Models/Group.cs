@@ -8,6 +8,7 @@ namespace MYVote.Models
     public partial class Group
     {
         [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Title { get; set; }
         public long? Topic { get; set; }

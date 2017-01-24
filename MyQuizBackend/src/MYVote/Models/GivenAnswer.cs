@@ -8,6 +8,7 @@ namespace MYVote.Models
     public partial class GivenAnswer
     {
         [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         [Column("GroupID")]
         public long? GroupId { get; set; }
