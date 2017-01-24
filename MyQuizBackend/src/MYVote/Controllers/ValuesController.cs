@@ -17,13 +17,13 @@ namespace MYVote.Controllers
             using (var db = new APIVoteDbContext())
             {
                 var device = new Device();
-                device.Id = 1;
-                device.PushUpToken = "First Device";
+                device.Id = 3;
+                device.PushUpToken = "3rd Device";
                 db.Device.Add(device);
 
                 var group = new Group();
-                group.Id = 1;
-                group.Title = "First Title Test";
+                group.Id = 2;
+                group.Title = "3rd Title Test";
                 group.Topic = 1;
                 group.EnterGroupPin = 12345;
                 db.Group.Add(group);

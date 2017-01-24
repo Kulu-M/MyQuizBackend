@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace MyQuizBackend.Controllers
 {
     [Route("api/[controller]")]
-    public class GroupController : Controller
+    public class DevicesController : Controller
     {
         // GET: api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "devices", "controller" };
         }
 
         // GET api/values/5

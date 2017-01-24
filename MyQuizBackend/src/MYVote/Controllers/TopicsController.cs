@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MyQuizBackend.Controllers
 {
     [Route("api/[controller]")]
-    public class DeviceController : Controller
+    public class TopicsController : Controller
     {
         // GET: api/values
         [HttpGet]
