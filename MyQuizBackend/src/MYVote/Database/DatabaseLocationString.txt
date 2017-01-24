@@ -1,0 +1,3 @@
+﻿var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVoteDB_Final.db");
+
+optionsBuilder.UseSqlite(@"Datasource=" + path);

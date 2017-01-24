@@ -13,19 +13,16 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class GroupsController : Controller
     {
-        // GET: api/groups
+        #region GET
+        
+        // GET api/groups
         [HttpGet]
         public string Get()
         {
-            //Get All Groups
-            JsonSerializer serializer = new JsonSerializer();
-
             using (var db = new APIVoteDbContext())
             {
-                var groups = (from x in db.Group select x);
-                //groups = db.Group.First(g => g.Id >= 1);
+                var groups = from gr in db.Group select gr;
                 return JsonConvert.SerializeObject(groups);
-
             }
         }
 
@@ -33,16 +30,17 @@ namespace MyQuizBackend.Controllers
         [HttpGet("{id}/topics")]
         public string Get(int id)
         {
-            JsonSerializer serializer = new JsonSerializer();
-
             using (var db = new APIVoteDbContext())
             {
-                var topics = (from x in db.Topic select x);
-                //groups = db.Group.First(g => g.Id >= 1);
-                return JsonConvert.SerializeObject(topics);
-            }
+                var singleTopicIdFinder = (from topicSingletopic in db.TopicSingleTopic where topicSingletopic.TopicId == id select topicSingletopic.SingleTopicId);
 
+                var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
+                
+                return JsonConvert.SerializeObject(singleTopics);
+            }
         }
+
+        #endregion GET
 
         // POST api/groups
         [HttpPost]
