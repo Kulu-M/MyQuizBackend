@@ -12,4 +12,5 @@ namespace MYVote.Models
         public long Id { get; set; }
         public string PushUpToken { get; set; }
     }
+
 }

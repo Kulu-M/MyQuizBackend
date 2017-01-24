@@ -16,24 +16,7 @@ namespace MYVote.Controllers
         {
             using (var db = new APIVoteDbContext())
             {
-                //var device = new Device();
-                //device.Id = 3;
-                //device.PushUpToken = "3rd Device";
-                //db.Device.Add(device);
 
-                //var group = new Group();
-                //group.Id = 4;
-                //group.Title = "3rd Title Test";
-                //group.Topic = 1;
-                //group.EnterGroupPin = 12345;
-                //db.Group.Add(group);
-
-                //var deviceGroup = new DeviceGroup();
-                //deviceGroup.DeviceId = device.Id;
-                //deviceGroup.GroupId = group.Id;
-                //db.DeviceGroup.Add(deviceGroup);
-                
-                //db.SaveChanges();
 
             }
             return new string[] { "value1", "value2" };
