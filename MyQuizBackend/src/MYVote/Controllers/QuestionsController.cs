@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using MYVote.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,9 +15,20 @@ namespace MyQuizBackend.Controllers
     {
         // GET: api/questions
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            //Get All Groups
+            JsonSerializer serializer = new JsonSerializer();
+
+            using (var db = new APIVoteDbContext())
+            {
+                var question = (from x in db.Question select x);
+                //groups = db.Group.First(g => g.Id >= 1);
+
+                return JsonConvert.SerializeObject(question);
+
+            }
+
         }
 
         // GET api/questions/5

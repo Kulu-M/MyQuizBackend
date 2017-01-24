@@ -15,18 +15,11 @@ namespace MyQuizBackend.Controllers
     {
         // GET: api/groups
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2"};
-        }
-
-        // GET api/groups/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get()
         {
             //Get All Groups
             JsonSerializer serializer = new JsonSerializer();
-            
+
             using (var db = new APIVoteDbContext())
             {
                 var groups = (from x in db.Group select x);
@@ -35,6 +28,13 @@ namespace MyQuizBackend.Controllers
                 return JsonConvert.SerializeObject(groups);
 
             }
+        }
+
+        // GET api/groups/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "";
 
         }
 
