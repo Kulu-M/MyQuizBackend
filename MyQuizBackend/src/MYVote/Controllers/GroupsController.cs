@@ -24,7 +24,6 @@ namespace MyQuizBackend.Controllers
             {
                 var groups = (from x in db.Group select x);
                 //groups = db.Group.First(g => g.Id >= 1);
-
                 return JsonConvert.SerializeObject(groups);
 
             }
@@ -40,9 +39,7 @@ namespace MyQuizBackend.Controllers
             {
                 var topics = (from x in db.Topic select x);
                 //groups = db.Group.First(g => g.Id >= 1);
-
                 return JsonConvert.SerializeObject(topics);
-
             }
 
         }
@@ -51,7 +48,6 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
-
         }
 
         [HttpPost("{id}/topics")]
@@ -60,14 +56,9 @@ namespace MyQuizBackend.Controllers
             using (var db = new APIVoteDbContext())
             {
                 var topics = new Topic();
-                topics.Id = 1;
                 topics.Name = "";
-
                 db.Topic.Add(topics);
-
                 db.SaveChanges();
-
-
             }
         }
 
