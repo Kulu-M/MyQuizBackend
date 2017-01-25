@@ -16,14 +16,11 @@ namespace MyQuizBackend.Controllers
     {
         // GET: api/questions
         [HttpGet]
-        public string Get()
+        public string GetAllQuestions()
         {
-            //Get All Groups
             using (var db = new EF_DB_Context())
             {
-                var question = from x in db.Question select x;
-                //groups = db.Group.First(g => g.Id >= 1);
-
+                var question = from q in db.Question select q;
                 return JsonConvert.SerializeObject(question);
             }
         }
