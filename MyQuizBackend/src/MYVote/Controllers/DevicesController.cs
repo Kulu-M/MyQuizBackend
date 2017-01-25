@@ -32,7 +32,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/devices
         [HttpPost]
-        public long Post(string value)
+        public long RegisterDevice(string value)
         {
             var body = new StreamReader(Request.Body).ReadToEnd();
             
@@ -46,6 +46,22 @@ namespace MyQuizBackend.Controllers
             }
         }
 
+        // POST api/devices/login
+        [HttpPost("login")]
+        public void Login(string value)
+        {
+            var password = Request.Headers["password"].ToString();
+
+            //TODO besprechen Donnerstag
+            //es gibt kein pw im datenmodell - muss besprochen werden!
+
+            using (var db = new EF_DB_Context())
+            {
+
+            }
+        }
+
+        //TODO besprechen Marius
         //Welches Route ist das? Laut Plan gibt es keine mit "add"?
         [HttpPost("add")]
         public void Post(int id)
