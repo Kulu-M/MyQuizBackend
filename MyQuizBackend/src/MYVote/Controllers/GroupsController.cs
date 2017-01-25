@@ -104,16 +104,31 @@ namespace MyQuizBackend.Controllers
 
         #endregion POST
 
+        #region PUT
+
         // PUT api/groups/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/groups/5
+        #endregion PUT
+
+        #region DELETE
+
+        // DELETE api/groups/id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteGroup(int id)
         {
+            using (var db = new EF_DB_Context())
+            {
+                var groupToDelete = db.Group.FirstOrDefault(gr => gr.Id == id);
+                if (groupToDelete == null) return;
+                db.Group.Remove(groupToDelete);
+                db.SaveChanges();
+            }
         }
+
+        #endregion DELETE
     }
 }
