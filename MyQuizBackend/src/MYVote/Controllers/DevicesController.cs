@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -30,10 +32,21 @@ namespace MyQuizBackend.Controllers
 
         // POST api/devices
         [HttpPost]
-        public void Post([FromBody]string value)
+        public long Post(string value)
         {
-
+            var body = new StreamReader(Request.Body).ReadToEnd();
+            
+            using (var db = new EF_DB_Context())
+            {
+                var device = new Device();
+                device.PushUpToken = body;
+                db.Device.Add(device);
+                db.SaveChanges();
+                return device.Id;
+            }
         }
+
+        //Welches Route ist das? Laut Plan gibt es keine mit "add"?
         [HttpPost("add")]
         public void Post(int id)
         {
