@@ -47,7 +47,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/groups
         [HttpPost]
-        public void CreateNewGroup([FromBody]JObject value)
+        public void CreateOrUpdateGroup([FromBody]JObject value)
         {
             var group = JsonConvert.DeserializeObject<Group>(value.ToString());
             using (var db = new EF_DB_Context())
