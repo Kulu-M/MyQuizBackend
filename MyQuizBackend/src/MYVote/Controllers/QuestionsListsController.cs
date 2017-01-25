@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MYVote.Models;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,6 +13,8 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class QuestionsListsController : Controller
     {
+        #region GET
+
         // GET: api/questionslists
         [HttpGet]
         public IEnumerable<string> Get()
@@ -18,12 +22,18 @@ namespace MyQuizBackend.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/questionslists/5
+        // GET api/questionslists/id
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string GetPreparedFinalQuestion(int id)
         {
-            return "value";
+            using (var db = new EF_DB_Context())
+            {
+                var finalQ = db.FinalQuestion.FirstOrDefault(fq => fq.Id == id);
+                return JsonConvert.SerializeObject(finalQ);
+            }
         }
+
+        #endregion GET
 
         // POST api/questionslists
         [HttpPost]
