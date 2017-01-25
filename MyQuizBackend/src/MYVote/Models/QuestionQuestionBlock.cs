@@ -8,8 +8,9 @@ namespace MYVote.Models
     [Table("Question_QuestionBlock")]
     public partial class QuestionQuestionBlock
     {
+        [Column("ID")]
+        public long Id { get; set; }
         [Column("QuestionID")]
-        [Key]
         public long QuestionId { get; set; }
         [Column("QuestionBlockID")]
         public long QuestionBlockId { get; set; }

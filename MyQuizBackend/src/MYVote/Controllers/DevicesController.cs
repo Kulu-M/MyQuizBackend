@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using MYVote.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MYVote.Models;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -37,15 +37,12 @@ namespace MyQuizBackend.Controllers
         [HttpPost("add")]
         public void Post(int id)
         {
-
-
-            using (var db = new APIVoteDbContext())
+            using (var db = new EF_DB_Context())
             {
                 var device = new Device();
-                
+
                 db.Device.Add(device);
                 db.SaveChanges();
-
             }
         }
 

@@ -19,7 +19,7 @@ namespace MyQuizBackend.Controllers
         [HttpGet]
         public string Get()
         {
-            using (var db = new APIVoteDbContext())
+            using (var db = new EF_DB_Context())
             {
                 var groups = from gr in db.Group select gr;
                 return JsonConvert.SerializeObject(groups);
@@ -30,12 +30,12 @@ namespace MyQuizBackend.Controllers
         [HttpGet("{id}/topics")]
         public string Get(int id)
         {
-            using (var db = new APIVoteDbContext())
+            using (var db = new EF_DB_Context())
             {
                 var singleTopicIdFinder = (from topicSingletopic in db.TopicSingleTopic where topicSingletopic.TopicId == id select topicSingletopic.SingleTopicId);
 
                 var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
-                
+
                 return JsonConvert.SerializeObject(singleTopics);
             }
         }
@@ -51,7 +51,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/topics")]
         public void Post(int id)
         {
-            using (var db = new APIVoteDbContext())
+            using (var db = new EF_DB_Context())
             {
                 var topics = new Topic();
                 topics.Name = "";

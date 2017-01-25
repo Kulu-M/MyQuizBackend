@@ -8,8 +8,9 @@ namespace MYVote.Models
     [Table("Topic_SingleTopic")]
     public partial class TopicSingleTopic
     {
+        [Column("ID")]
+        public long Id { get; set; }
         [Column("TopicID")]
-        [Key]
         public long TopicId { get; set; }
         [Column("SingleTopicID")]
         public long SingleTopicId { get; set; }

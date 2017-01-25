@@ -1,18 +1,17 @@
 ﻿using System;
 using System.IO;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MYVote.Models
 {
-    public partial class APIVoteDbContext : DbContext
+    public partial class EF_DB_Context : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVoteDB_Final.db");
+            var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVoteDB_Final.db");
 
-           optionsBuilder.UseSqlite(@"Datasource=" + path);
+            optionsBuilder.UseSqlite(@"Datasource=" + path);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,0 +1,5 @@
+﻿dotnet ef dbcontext scaffold "Datasource=C:\ASPNET\APIApp\webbookmarks.db3" -o Models Microsoft.EntityFrameworkCore.Sqlite -c "APIAppDbContext" -f -a
+
+See also:
+
+http://dotnetthoughts.net/entity-framework-core-scaffold-dbcontext-from-existing-database/

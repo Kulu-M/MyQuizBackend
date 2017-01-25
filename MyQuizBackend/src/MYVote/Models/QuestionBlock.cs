@@ -8,7 +8,6 @@ namespace MYVote.Models
     public partial class QuestionBlock
     {
         [Column("ID")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Title { get; set; }
     }

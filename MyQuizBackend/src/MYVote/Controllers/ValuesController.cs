@@ -14,7 +14,7 @@ namespace MYVote.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            using (var db = new APIVoteDbContext())
+            using (var db = new EF_DB_Context())
             {
 
 
