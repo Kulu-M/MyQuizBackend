@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MYVote.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,7 +43,21 @@ namespace MyQuizBackend.Controllers
 
         #endregion GET
 
-        // POST api/groups
+        #region POST
+
+        // POST api/groups/{id}/questions/{questionId}/answers
+        [HttpPost("{id}/questions/{questionId}/answers")]
+        public void ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
+        {
+            var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+
+            using (var db = new EF_DB_Context())
+            {
+                db.GivenAnswer.Add(givenAnswer);
+                db.SaveChanges();
+            }
+        }
+
         [HttpPost]
         public void Post([FromBody]string value)
         {
@@ -59,6 +74,8 @@ namespace MyQuizBackend.Controllers
                 db.SaveChanges();
             }
         }
+
+        #endregion POST
 
         // PUT api/groups/5
         [HttpPut("{id}")]
