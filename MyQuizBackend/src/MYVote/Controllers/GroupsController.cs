@@ -45,6 +45,38 @@ namespace MyQuizBackend.Controllers
 
         #region POST
 
+        // POST api/groups
+        [HttpPost]
+        public void CreateNewGroup([FromBody]JObject value)
+        {
+            var group = JsonConvert.DeserializeObject<Group>(value.ToString());
+            using (var db = new EF_DB_Context())
+            {
+                var existingGroup = db.Group.First(gr => gr.Id == group.Id);
+                if (existingGroup == null)
+                {
+                    db.Group.Add(group);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(group.Title))
+                    {
+                        existingGroup.Title = group.Title;
+                    }
+                    if (group.Topic != null)
+                    {
+                        existingGroup.Topic = group.Topic;
+                    }
+                    if (group.EnterGroupPin != null )
+                    {
+                        existingGroup.EnterGroupPin = group.EnterGroupPin;
+                    }
+                    db.SaveChanges();
+                }
+            }
+        }
+
         // POST api/groups/{id}/questions/{questionId}/answers
         [HttpPost("{id}/questions/{questionId}/answers")]
         public void ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
@@ -56,11 +88,6 @@ namespace MyQuizBackend.Controllers
                 db.GivenAnswer.Add(givenAnswer);
                 db.SaveChanges();
             }
-        }
-
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
         }
 
         [HttpPost("{id}/topics")]
