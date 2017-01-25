@@ -18,7 +18,7 @@ namespace MyQuizBackend.Controllers
         
         // GET api/groups
         [HttpGet]
-        public string Get()
+        public string GetAllGroups()
         {
             using (var db = new EF_DB_Context())
             {
@@ -29,7 +29,7 @@ namespace MyQuizBackend.Controllers
 
         // GET api/groups/id/topics
         [HttpGet("{id}/topics")]
-        public string Get(int id)
+        public string GetAllTopicsForId(int id)
         {
             using (var db = new EF_DB_Context())
             {
@@ -38,6 +38,18 @@ namespace MyQuizBackend.Controllers
                 var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
 
                 return JsonConvert.SerializeObject(singleTopics);
+            }
+        }
+
+        // GET api/groups/id/questions
+        [HttpGet("{id}/questions")]
+        public string GetAllFinalQuestionsForGroupId(int id)
+        {
+            using (var db = new EF_DB_Context())
+            {
+               var finalQuestionsForGroupId = db.FinalQuestion.Where(fq => fq.GroupId == id);
+
+               return JsonConvert.SerializeObject(finalQuestionsForGroupId);
             }
         }
 
