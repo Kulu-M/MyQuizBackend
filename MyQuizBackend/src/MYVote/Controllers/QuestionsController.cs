@@ -14,7 +14,9 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : Controller
     {
-        // GET: api/questions
+        #region GET
+
+        // GET api/questions
         [HttpGet]
         public string GetAllQuestions()
         {
@@ -32,11 +34,33 @@ namespace MyQuizBackend.Controllers
             return "value";
         }
 
+        #endregion GET
+
+        #region POST
+
         // POST api/questions
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void CreateOrUpdateQuestion([FromBody]string value)
         {
+            var question = JsonConvert.DeserializeObject<Question>(value.ToString());
+            using (var db = new EF_DB_Context())
+            {
+                var existingQuestion = db.Question.First(q => q.Id == question.Id);
+                if (existingQuestion == null)
+                {
+                    db.Question.Add(question);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(question.Text)) return;
+                    existingQuestion.Text = question.Text;
+                    db.SaveChanges();
+                }
+            }
         }
+
+        #endregion POST
 
         // PUT api/questions/5
         [HttpPut("{id}")]
