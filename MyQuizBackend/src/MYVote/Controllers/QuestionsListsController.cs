@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MYVote.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,10 +48,26 @@ namespace MyQuizBackend.Controllers
         {
         }
 
-        // DELETE api/questionslists/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        #region DELETE
+
+        // DELETE api/questionslists
+        [HttpDelete]
+        public void DeleteQuestionList([FromBody]JObject value)
         {
+            var questionList = JsonConvert.DeserializeObject<List<Question>>(value.ToString());
+
+            foreach (var q in questionList)
+            {
+                using (var db = new EF_DB_Context())
+                {
+                    var questionToDelete = db.Question.FirstOrDefault(questionInDb => questionInDb.Id == q.Id);
+                    if (questionToDelete == null) continue;
+                    db.Question.Remove(questionToDelete);
+                    db.SaveChanges();
+                }
+            }
         }
+
+        #endregion DELETE
     }
 }
