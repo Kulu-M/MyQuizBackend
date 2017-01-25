@@ -68,10 +68,21 @@ namespace MyQuizBackend.Controllers
         {
         }
 
-        // DELETE api/questions/5
+        #region DELETE
+        
+        // DELETE api/questions/id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteQuestion(int id)
         {
+            using (var db = new EF_DB_Context())
+            {
+                var questionToDelete = db.Question.FirstOrDefault(q => q.Id == id);
+                if (questionToDelete == null) return;
+                db.Question.Remove(questionToDelete);
+                db.SaveChanges();
+            }
         }
+
+        #endregion DELETE
     }
 }
