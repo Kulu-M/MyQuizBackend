@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MYVote.Models
 {
-    [Table("Topic_SingleTopic")]
-    public partial class TopicSingleTopic
-        {//TODO kaNN WEG??
+    [Table("Group_SingleTopic")]
+    public partial class GroupSingleTopic
+    {
         [Column("ID")]
         public long Id { get; set; }
-        [Column("TopicID")]
-        public long TopicId { get; set; }
+        [Column("GroupID")]
+        public long GroupId { get; set; }
         [Column("SingleTopicID")]
         public long SingleTopicId { get; set; }
     }

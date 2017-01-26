@@ -26,12 +26,12 @@ namespace MYVote.Models
         public virtual DbSet<FinalQuestionGivenAnswer> FinalQuestionGivenAnswer { get; set; }
         public virtual DbSet<GivenAnswer> GivenAnswer { get; set; }
         public virtual DbSet<Group> Group { get; set; }
+        public virtual DbSet<GroupSingleTopic> GroupSingleTopic { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionAnswerOption> QuestionAnswerOption { get; set; }
         public virtual DbSet<QuestionBlock> QuestionBlock { get; set; }
         public virtual DbSet<QuestionQuestionBlock> QuestionQuestionBlock { get; set; }
         public virtual DbSet<SingleTopic> SingleTopic { get; set; }
         public virtual DbSet<Topic> Topic { get; set; }
-        public virtual DbSet<TopicSingleTopic> TopicSingleTopic { get; set; }
     }
 }

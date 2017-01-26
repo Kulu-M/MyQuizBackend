@@ -10,6 +10,6 @@ namespace MYVote.Models
         [Column("ID")]
         public long Id { get; set; }
         public string PushUpToken { get; set; }
-        public string IsAdmin { get; set; }
+        public long? IsAdmin { get; set; }
     }
 }
