@@ -40,6 +40,8 @@ namespace MYVote
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            //Comment this out to stop giving Exception information as HTTP response on requests
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

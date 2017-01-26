@@ -51,7 +51,7 @@ namespace MyQuizBackend.Controllers
 
                 var device = new Device {PushUpToken = registration.token};
 
-                if (string.IsNullOrWhiteSpace(registration.password) || registration.password == Constants.adminPassword)
+                if (registration.password == Constants.adminPassword)
                 {                        
                     device.IsAdmin = 1;
                 }
