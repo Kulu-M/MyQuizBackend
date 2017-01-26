@@ -59,7 +59,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/groups
         [HttpPost]
-        public void CreateOrUpdateGroup([FromBody]JObject value)
+        public string CreateOrUpdateGroup([FromBody]JObject value)
         {
             var group = JsonConvert.DeserializeObject<Group>(value.ToString());
             using (var db = new EF_DB_Context())
@@ -70,28 +70,15 @@ namespace MyQuizBackend.Controllers
                     db.Group.Add(group);
                     db.SaveChanges();
                 }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(group.Title))
-                    {
-                        existingGroup.Title = group.Title;
-                    }
-                    if (group.Topic != null)
-                    {
-                        existingGroup.Topic = group.Topic;
-                    }
-                    if (group.EnterGroupPin != null )
-                    {
-                        existingGroup.EnterGroupPin = group.EnterGroupPin;
-                    }
-                    db.SaveChanges();
-                }
+                existingGroup = @group;
+                db.SaveChanges();
+                return JsonConvert.SerializeObject(group);
             }
         }
 
         // POST api/groups/{id}/questions/{questionId}/answers
         [HttpPost("{id}/questions/{questionId}/answers")]
-        public void ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
+        public string ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
             var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
 
@@ -100,8 +87,10 @@ namespace MyQuizBackend.Controllers
                 db.GivenAnswer.Add(givenAnswer);
                 db.SaveChanges();
             }
+            return JsonConvert.SerializeObject(givenAnswer);
         }
 
+        //TODO finish this implementation
         [HttpPost("{id}/topics")]
         public void Post(int id)
         {
