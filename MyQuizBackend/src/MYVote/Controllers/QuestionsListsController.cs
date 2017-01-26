@@ -16,13 +16,6 @@ namespace MyQuizBackend.Controllers
     {
         #region GET
 
-        // GET: api/questionslists
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/questionslists/id
         [HttpGet("{id}")]
         public string GetPreparedFinalQuestion(int id)
