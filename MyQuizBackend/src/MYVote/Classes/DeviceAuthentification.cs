@@ -7,7 +7,7 @@ namespace MyQuizBackend
 {
     public class DeviceAuthentification
     {
-        public bool authenticateAdminDevice(int inputPassword)
+        public bool authenticateAdminDevice(string inputPassword)
         {
             return inputPassword == Constants.adminPassword;
         }
