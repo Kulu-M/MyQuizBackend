@@ -46,35 +46,6 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        // POST api/devices/login
-        [HttpPost("login")]
-        public void Login(string value)
-        {
-            var password = Request.Headers["password"].ToString();
-
-            //TODO besprechen Donnerstag
-            //es gibt kein pw im datenmodell - muss besprochen werden!
-
-            using (var db = new EF_DB_Context())
-            {
-
-            }
-        }
-
-        //TODO besprechen Marius
-        //Welches Route ist das? Laut Plan gibt es keine mit "add"?
-        [HttpPost("add")]
-        public void Post(int id)
-        {
-            using (var db = new EF_DB_Context())
-            {
-                var device = new Device();
-
-                db.Device.Add(device);
-                db.SaveChanges();
-            }
-        }
-
         // PUT api/devices/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)

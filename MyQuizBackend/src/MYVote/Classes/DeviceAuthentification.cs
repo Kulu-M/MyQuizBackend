@@ -11,13 +11,5 @@ namespace MyQuizBackend
         {
             return inputPassword == Constants.adminPassword;
         }
-
-        public bool authenticateClientDevice(int deviceID)
-        {
-            //what we want to check here?
-            return false;
-        }
-
-        
     }
 }
