@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MYVote.Models;
+using Newtonsoft.Json;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -32,17 +33,38 @@ namespace MyQuizBackend.Controllers
 
         // POST api/devices
         [HttpPost]
-        public long RegisterDevice(string value)
+        public IActionResult RegisterDevice([FromBody]string value)
         {
-            var body = new StreamReader(Request.Body).ReadToEnd();
-            
+            var registration = JsonConvert.DeserializeObject<RegistrationDevice>(value.ToString());
+            var device = new Device();
             using (var db = new EF_DB_Context())
             {
-                var device = new Device();
-                device.PushUpToken = body;
-                db.Device.Add(device);
-                db.SaveChanges();
-                return device.Id;
+                var existingDevice = registration.deviceID;
+                var token = registration.token;
+                var password = registration.password;
+
+                var check = db.Device.First(d => d.Id == existingDevice).ToString();
+                if (check != null)
+                {
+                    return Ok(JsonConvert.SerializeObject(device));
+                }
+                else
+                {
+                    device.Id = existingDevice;
+                    device.PushUpToken = token;
+
+                    if (password == Constants.adminPassword)
+                    {                        
+                        device.IsAdmin = "true";
+                    }
+                    else
+                    {
+                        device.IsAdmin = "false";
+                    }
+                    db.Device.Add(device);
+                    db.SaveChanges();
+                    return Ok(JsonConvert.SerializeObject(device));
+                }
             }
         }
 

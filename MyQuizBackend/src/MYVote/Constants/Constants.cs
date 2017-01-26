@@ -7,6 +7,6 @@ namespace MyQuizBackend
 {
     public class Constants
     {
-        public static readonly int adminPassword = 1337;
+        public static readonly string adminPassword = "1337";
     }
 }
