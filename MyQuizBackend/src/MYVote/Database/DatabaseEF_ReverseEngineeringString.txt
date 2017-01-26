@@ -1,4 +1,4 @@
-﻿dotnet ef dbcontext scaffold "Datasource=C:\ASPNET\APIApp\webbookmarks.db3" -o Models Microsoft.EntityFrameworkCore.Sqlite -c "APIAppDbContext" -f -a
+﻿dotnet ef dbcontext scaffold "Datasource=C:\Users\Kulu-M\Documents\MyQuizBackend\MyQuizBackend\src\MYVote\Database\MYVoteDB_Final.db" -o Models Microsoft.EntityFrameworkCore.Sqlite -c "EF_DB_Context" -f -a
 
 See also:
 
