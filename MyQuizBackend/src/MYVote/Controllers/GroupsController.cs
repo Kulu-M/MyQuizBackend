@@ -130,14 +130,15 @@ namespace MyQuizBackend.Controllers
 
         // DELETE api/groups/id
         [HttpDelete("{id}")]
-        public void DeleteGroup(int id)
+        public IActionResult DeleteGroup(int id)
         {
             using (var db = new EF_DB_Context())
             {
                 var groupToDelete = db.Group.FirstOrDefault(gr => gr.Id == id);
-                if (groupToDelete == null) return;
+                if (groupToDelete == null) return StatusCode(404);
                 db.Group.Remove(groupToDelete);
                 db.SaveChanges();
+                return Ok(JsonConvert.SerializeObject(groupToDelete));
             }
         }
 
