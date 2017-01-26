@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MYVote.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,38 +34,31 @@ namespace MyQuizBackend.Controllers
 
         // POST api/devices
         [HttpPost]
-        public IActionResult RegisterDevice([FromBody]string value)
+        public IActionResult RegisterDevice([FromBody]JObject value)
         {
             var registration = JsonConvert.DeserializeObject<RegistrationDevice>(value.ToString());
-            var device = new Device();
+            
             using (var db = new EF_DB_Context())
             {
-                var existingDevice = registration.deviceID;
-                var token = registration.token;
-                var password = registration.password;
-
-                var check = db.Device.First(d => d.Id == existingDevice).ToString();
+                var check = db.Device.FirstOrDefault(d => d.PushUpToken == registration.token);
                 if (check != null)
                 {
-                    return Ok(JsonConvert.SerializeObject(device));
+                    return Ok(JsonConvert.SerializeObject(check));
+                }
+
+                var device = new Device {PushUpToken = registration.token};
+
+                if (string.IsNullOrWhiteSpace(registration.password) || registration.password == Constants.adminPassword)
+                {                        
+                    device.IsAdmin = 1;
                 }
                 else
                 {
-                    device.Id = existingDevice;
-                    device.PushUpToken = token;
-
-                    if (password == Constants.adminPassword)
-                    {                        
-                        device.IsAdmin = "true";
-                    }
-                    else
-                    {
-                        device.IsAdmin = "false";
-                    }
-                    db.Device.Add(device);
-                    db.SaveChanges();
-                    return Ok(JsonConvert.SerializeObject(device));
+                    device.IsAdmin = 0;
                 }
+                db.Device.Add(device);
+                db.SaveChanges();
+                return Ok(JsonConvert.SerializeObject(device));
             }
         }
 
