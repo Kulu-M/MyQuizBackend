@@ -40,10 +40,13 @@ namespace MyQuizBackend.Controllers
             
             using (var db = new EF_DB_Context())
             {
-                var check = db.Device.FirstOrDefault(d => d.PushUpToken == registration.token);
-                if (check != null)
+                if (!string.IsNullOrWhiteSpace(registration.token))
                 {
-                    return Ok(JsonConvert.SerializeObject(check));
+                    var check = db.Device.FirstOrDefault(d => d.PushUpToken == registration.token);
+                    if (check != null)
+                    {
+                        return Ok(JsonConvert.SerializeObject(check));
+                    }
                 }
 
                 var device = new Device {PushUpToken = registration.token};

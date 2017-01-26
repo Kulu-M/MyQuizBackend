@@ -31,14 +31,15 @@ namespace MyQuizBackend.Controllers
         [HttpGet("{id}/topics")]
         public string GetAllTopicsForId(int id)
         {
-            using (var db = new EF_DB_Context())
-            {
-                var singleTopicIdFinder = (from topicSingletopic in db.TopicSingleTopic where topicSingletopic.TopicId == id select topicSingletopic.SingleTopicId);
+            //using (var db = new EF_DB_Context())
+            //{
+            //    var singleTopicIdFinder = (from topicSingletopic in db.TopicSingleTopic where topicSingletopic.TopicId == id select topicSingletopic.SingleTopicId);
 
-                var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
+            //    var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
 
-                return JsonConvert.SerializeObject(singleTopics);
-            }
+            //    return JsonConvert.SerializeObject(singleTopics);
+            //}
+            return "";
         }
 
         // GET api/groups/id/questions
