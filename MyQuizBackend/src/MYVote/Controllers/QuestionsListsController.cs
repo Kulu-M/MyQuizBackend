@@ -18,12 +18,13 @@ namespace MyQuizBackend.Controllers
 
         // GET api/questionslists/id
         [HttpGet("{id}")]
-        public string GetPreparedFinalQuestion(int id)
+        public IActionResult GetPreparedFinalQuestion(int id)
         {
             using (var db = new EF_DB_Context())
             {
                 var finalQ = db.FinalQuestion.FirstOrDefault(fq => fq.Id == id);
-                return JsonConvert.SerializeObject(finalQ);
+                return Ok(JsonConvert.SerializeObject(finalQ));
+
             }
         }
 

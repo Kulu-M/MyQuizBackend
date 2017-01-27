@@ -18,12 +18,12 @@ namespace MyQuizBackend.Controllers
         
         // GET api/groups
         [HttpGet]
-        public string GetAllGroups()
+        public IActionResult GetAllGroups()
         {
             using (var db = new EF_DB_Context())
             {
                 var groups = from gr in db.Group select gr;
-                return JsonConvert.SerializeObject(groups);
+                return Ok(JsonConvert.SerializeObject(groups));
             }
         }
 
@@ -44,13 +44,15 @@ namespace MyQuizBackend.Controllers
 
         // GET api/groups/id/questions
         [HttpGet("{id}/questions")]
-        public string GetAllFinalQuestionsForGroupId(int id)
+        public IActionResult GetAllFinalQuestionsForGroupId(int id)
         {
             using (var db = new EF_DB_Context())
             {
                var finalQuestionsForGroupId = db.FinalQuestion.Where(fq => fq.GroupId == id);
 
-               return JsonConvert.SerializeObject(finalQuestionsForGroupId);
+               return Ok(JsonConvert.SerializeObject(finalQuestionsForGroupId));
+
+
             }
         }
 
@@ -60,7 +62,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/groups
         [HttpPost]
-        public string CreateOrUpdateGroup([FromBody]JObject value)
+        public IActionResult CreateOrUpdateGroup([FromBody]JObject value)
         {
             var group = JsonConvert.DeserializeObject<Group>(value.ToString());
             using (var db = new EF_DB_Context())
@@ -73,13 +75,13 @@ namespace MyQuizBackend.Controllers
                 }
                 existingGroup = @group;
                 db.SaveChanges();
-                return JsonConvert.SerializeObject(group);
+                return Ok(JsonConvert.SerializeObject(group));
             }
         }
 
         // POST api/groups/{id}/questions/{questionId}/answers
         [HttpPost("{id}/questions/{questionId}/answers")]
-        public string ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
+        public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
             var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
 
@@ -88,7 +90,8 @@ namespace MyQuizBackend.Controllers
                 db.GivenAnswer.Add(givenAnswer);
                 db.SaveChanges();
             }
-            return JsonConvert.SerializeObject(givenAnswer);
+            return Ok(JsonConvert.SerializeObject(givenAnswer));
+
         }
 
         //TODO finish this implementation
