@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using MyQuizBackend;
 using Newtonsoft.Json;
 
 public class ErrorHandlingMiddleware
@@ -33,7 +34,16 @@ public class ErrorHandlingMiddleware
 
         var code = HttpStatusCode.InternalServerError;
 
-     await WriteExceptionAsync(context, exception, code).ConfigureAwait(false);
+        writeExceptionToLogFile(exception);
+
+        await WriteExceptionAsync(context, exception, code).ConfigureAwait(false);
+    }
+
+    public static void writeExceptionToLogFile(Exception exception)
+    {
+        var stringToLog = exception.Message + Environment.NewLine + exception.GetType().Name + Environment.NewLine +
+                          exception.StackTrace + Environment.NewLine + exception.InnerException;
+        Logger.writeToLogFile(stringToLog);
     }
 
     private static async Task WriteExceptionAsync(HttpContext context, Exception exception, HttpStatusCode code)
