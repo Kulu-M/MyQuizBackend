@@ -78,16 +78,24 @@ namespace MyQuizBackend.Controllers
 
         #endregion POST
 
-        // PUT api/devices/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        #region DELETE
+
+        // DELETE api/devices/id
+        [HttpDelete("{id}")]
+        public void DeleteDevice(int id)
         {
+            var deviceID = Convert.ToInt64(Request.Headers["DeviceID"].ToString());
+            if (DeviceAuthentification.authenticateAdminDeviceByDeviceID(deviceID) == false) return;
+
+            using (var db = new EF_DB_Context())
+            {
+                var check = db.Device.FirstOrDefault(d => d.Id == id);
+                if (check == null) return;
+                db.Device.Remove(check);
+                db.SaveChanges();
+            }
         }
 
-        // DELETE api/devices/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        #endregion DELETE
     }
 }
