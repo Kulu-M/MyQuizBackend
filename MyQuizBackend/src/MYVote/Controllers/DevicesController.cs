@@ -18,6 +18,8 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class DevicesController : Controller
     {
+        #region GET
+
         // GET: api/devices
         [HttpGet]
         public IEnumerable<string> Get()
@@ -32,6 +34,10 @@ namespace MyQuizBackend.Controllers
             return "value";
         }
 
+        #endregion GET
+
+        #region POST
+
         // POST api/devices
         [HttpPost]
         public IActionResult RegisterDevice([FromBody]JObject value)
@@ -40,6 +46,7 @@ namespace MyQuizBackend.Controllers
             
             using (var db = new EF_DB_Context())
             {
+                //Device already in DB
                 if (!string.IsNullOrWhiteSpace(registration.token))
                 {
                     var check = db.Device.FirstOrDefault(d => d.PushUpToken == registration.token);
@@ -49,11 +56,15 @@ namespace MyQuizBackend.Controllers
                     }
                 }
 
-                var device = new Device {PushUpToken = registration.token};
-
-                if (registration.password == Constants.adminPassword)
-                {                        
+                //Device not in DB
+                var device = new Device();
+                if (!string.IsNullOrWhiteSpace(registration.password) && registration.password == Constants.adminPassword)
+                {
                     device.IsAdmin = 1;
+                }
+                else if (!string.IsNullOrWhiteSpace(registration.password) && registration.password != Constants.adminPassword)
+                {
+                    return Unauthorized();
                 }
                 else
                 {
@@ -64,6 +75,8 @@ namespace MyQuizBackend.Controllers
                 return Ok(JsonConvert.SerializeObject(device));
             }
         }
+
+        #endregion POST
 
         // PUT api/devices/5
         [HttpPut("{id}")]
