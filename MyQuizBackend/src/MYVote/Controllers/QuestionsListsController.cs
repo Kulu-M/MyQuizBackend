@@ -23,8 +23,8 @@ namespace MyQuizBackend.Controllers
             using (var db = new EF_DB_Context())
             {
                 var finalQ = db.FinalQuestion.FirstOrDefault(fq => fq.Id == id);
+                if (finalQ == null) return NotFound();
                 return Ok(JsonConvert.SerializeObject(finalQ));
-
             }
         }
 
