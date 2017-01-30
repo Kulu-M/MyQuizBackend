@@ -12,11 +12,11 @@ using Newtonsoft.Json.Linq;
 namespace MyQuizBackend.Controllers
 {
     [Route("api/[controller]")]
-    public class QuestionsListsController : Controller
+    public class QuestionListsController : Controller
     {
         #region GET
 
-        // GET api/questionslists/id
+        // GET api/questionLists/id
         [HttpGet("{id}")]
         public IActionResult GetPreparedFinalQuestion(int id)
         {
@@ -30,13 +30,13 @@ namespace MyQuizBackend.Controllers
 
         #endregion GET
 
-        // POST api/questionslists
+        // POST api/questionLists
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/questionslists/5
+        // PUT api/questionLists/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
@@ -44,7 +44,7 @@ namespace MyQuizBackend.Controllers
 
         #region DELETE
 
-        // DELETE api/questionslists
+        // DELETE api/questionLists
         [HttpDelete]
         public void DeleteQuestionList([FromBody]JObject value)
         {
