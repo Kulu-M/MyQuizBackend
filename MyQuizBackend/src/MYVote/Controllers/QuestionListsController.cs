@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyQuizBackend.Controllers
 {
+    //TODO this controller is redundant
     [Route("api/[controller]")]
     public class QuestionListsController : Controller
     {
