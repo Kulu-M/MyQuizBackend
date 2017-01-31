@@ -32,6 +32,5 @@ namespace MYVote.Models
         public virtual DbSet<QuestionBlock> QuestionBlock { get; set; }
         public virtual DbSet<QuestionQuestionBlock> QuestionQuestionBlock { get; set; }
         public virtual DbSet<SingleTopic> SingleTopic { get; set; }
-        public virtual DbSet<Topic> Topic { get; set; }
     }
 }
