@@ -23,11 +23,34 @@ namespace MyQuizBackend.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
+        // GET api/questionBlock/:id
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetQuestionBlockById(int id)
         {
-            return "value";
+            using (var db = new EF_DB_Context())
+            {
+                var questionBlockInDb = db.QuestionBlock.FirstOrDefault(qb => qb.Id == id);
+                if (questionBlockInDb == null) return BadRequest("Id not found!");
+
+                var questionsFinder =
+                    from q in db.QuestionQuestionBlock
+                    where q.QuestionBlockId == questionBlockInDb.Id
+                    select q.QuestionId;
+
+                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2 == q.Id));
+
+                foreach (var question in questionList)
+                {
+                    var answerOptionsFinder = from a in db.QuestionAnswerOption
+                        where a.QuestionId == question.Id
+                        select a.AnswerOptionId;
+
+                    question.answerList = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
+                }
+
+                questionBlockInDb.questionList = questionList.ToList();
+                return Ok(JsonConvert.SerializeObject(questionBlockInDb));
+            }
         }
 
         #endregion GET
