@@ -29,17 +29,16 @@ namespace MyQuizBackend.Controllers
 
         // GET api/groups/id/topics
         [HttpGet("{id}/topics")]
-        public string GetAllTopicsForId(int id)
+        public IActionResult GetAllTopicsForId(int id)
         {
-            //using (var db = new EF_DB_Context())
-            //{
-            //    var singleTopicIdFinder = (from topicSingletopic in db.TopicSingleTopic where topicSingletopic.TopicId == id select topicSingletopic.SingleTopicId);
+            using (var db = new EF_DB_Context())
+            {
+                var singleTopicIdFinder = (from groupSingletopic in db.GroupSingleTopic where groupSingletopic.GroupId == id select groupSingletopic.SingleTopicId);
 
-            //    var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
+                var singleTopics = db.SingleTopic.Where(stp => singleTopicIdFinder.Any(stp2 => stp2 == stp.Id));
 
-            //    return JsonConvert.SerializeObject(singleTopics);
-            //}
-            return "";
+                return Ok(JsonConvert.SerializeObject(singleTopics));
+            }
         }
 
         // GET api/groups/id/questions
@@ -51,8 +50,6 @@ namespace MyQuizBackend.Controllers
                var finalQuestionsForGroupId = db.FinalQuestion.Where(fq => fq.GroupId == id);
 
                return Ok(JsonConvert.SerializeObject(finalQuestionsForGroupId));
-
-
             }
         }
 
@@ -84,6 +81,7 @@ namespace MyQuizBackend.Controllers
         public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
             var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+            if (givenAnswer == null) return BadRequest();
 
             using (var db = new EF_DB_Context())
             {
@@ -91,20 +89,33 @@ namespace MyQuizBackend.Controllers
                 db.SaveChanges();
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
-
         }
 
-        //TODO finish this implementation
+        // POST api/groups/{id}/topics
         [HttpPost("{id}/topics")]
-        public void Post(int id)
+        public IActionResult Post(int id, [FromBody]JArray value)
         {
-            using (var db = new EF_DB_Context())
+            var listSingleTopics = JsonConvert.DeserializeObject<List<SingleTopic>>(value.ToString());
+            if (listSingleTopics == null || !listSingleTopics.Any()) return BadRequest();
+
+            foreach (var singleTopic in listSingleTopics)
             {
-                var topics = new Topic();
-                topics.Name = "";
-                db.Topic.Add(topics);
-                db.SaveChanges();
+                using (var db = new EF_DB_Context())
+                {
+                    //SaveChanges needs to be called inbetween to let the Database give the new entity and ID
+                    db.SingleTopic.Add(singleTopic);
+                    db.SaveChanges();
+
+                    var groupSingle = new GroupSingleTopic();
+                    groupSingle.GroupId = id;
+                    groupSingle.SingleTopicId = singleTopic.Id;
+                    db.GroupSingleTopic.Add(groupSingle);
+
+                    db.SaveChanges();
+                }
             }
+            
+            return Ok();
         }
 
         #endregion POST
