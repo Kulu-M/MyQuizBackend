@@ -61,6 +61,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public IActionResult CreateOrUpdateGroup([FromBody]JObject value)
         {
+            if (value == null) return BadRequest();
             var group = JsonConvert.DeserializeObject<Group>(value.ToString());
             using (var db = new EF_DB_Context())
             {
@@ -80,6 +81,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/questions/{questionId}/answers")]
         public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
+            if (value == null) return BadRequest();
             var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
             if (givenAnswer == null) return BadRequest();
 
@@ -95,6 +97,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/topics")]
         public IActionResult Post(int id, [FromBody]JArray value)
         {
+            if (value == null) return BadRequest();
             var listSingleTopics = JsonConvert.DeserializeObject<List<SingleTopic>>(value.ToString());
             if (listSingleTopics == null || !listSingleTopics.Any()) return BadRequest();
 

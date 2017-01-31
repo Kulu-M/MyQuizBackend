@@ -46,8 +46,9 @@ namespace MyQuizBackend.Controllers
 
         // DELETE api/questionLists
         [HttpDelete]
-        public void DeleteQuestionList([FromBody]JObject value)
+        public IActionResult DeleteQuestionList([FromBody]JObject value)
         {
+            if (value == null) return BadRequest();
             var questionList = JsonConvert.DeserializeObject<List<Question>>(value.ToString());
 
             foreach (var q in questionList)
@@ -60,6 +61,7 @@ namespace MyQuizBackend.Controllers
                     db.SaveChanges();
                 }
             }
+            return Ok(JsonConvert.SerializeObject(questionList));
         }
 
         #endregion DELETE

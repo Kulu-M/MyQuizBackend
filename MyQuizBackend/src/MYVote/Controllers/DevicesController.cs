@@ -42,6 +42,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public IActionResult RegisterDevice([FromBody]JObject value)
         {
+            if (value == null) return BadRequest();
             var registration = JsonConvert.DeserializeObject<RegistrationDevice>(value.ToString());
             
             using (var db = new EF_DB_Context())
