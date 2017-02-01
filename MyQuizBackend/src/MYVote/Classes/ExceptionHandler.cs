@@ -30,8 +30,6 @@ public class ErrorHandlingMiddleware
     {
         if (exception == null) return;
 
-        //TODO log exception to some logfile
-
         var code = HttpStatusCode.InternalServerError;
 
         writeExceptionToLogFile(exception);
