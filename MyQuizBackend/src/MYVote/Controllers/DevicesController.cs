@@ -42,8 +42,18 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public IActionResult RegisterDevice([FromBody]JObject value)
         {
+            RegistrationDevice registration;
+
             if (value == null) return BadRequest();
-            var registration = JsonConvert.DeserializeObject<RegistrationDevice>(value.ToString());
+
+            try
+            {
+                registration = JsonConvert.DeserializeObject<RegistrationDevice>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Cannot deserialize your input!");
+            }
             
             using (var db = new EF_DB_Context())
             {
@@ -71,6 +81,7 @@ namespace MyQuizBackend.Controllers
                 {
                     device.IsAdmin = 0;
                 }
+                device.PushUpToken = registration.token;
                 db.Device.Add(device);
                 db.SaveChanges();
                 return Ok(JsonConvert.SerializeObject(device));
