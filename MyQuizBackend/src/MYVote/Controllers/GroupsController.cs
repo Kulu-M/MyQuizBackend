@@ -81,8 +81,19 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/questions/{questionId}/answers")]
         public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            if (deviceID < 0) return Unauthorized();
+
+            GivenAnswer givenAnswer;
             if (value == null) return BadRequest();
-            var givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+            try
+            {
+                givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
             if (givenAnswer == null) return BadRequest();
 
             using (var db = new EF_DB_Context())
@@ -97,10 +108,18 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/topics")]
         public IActionResult Post(int id, [FromBody]JArray value)
         {
+            List<SingleTopic> listSingleTopics;
             if (value == null) return BadRequest();
-            var listSingleTopics = JsonConvert.DeserializeObject<List<SingleTopic>>(value.ToString());
+            try
+            {
+                listSingleTopics = JsonConvert.DeserializeObject<List<SingleTopic>>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
             if (listSingleTopics == null || !listSingleTopics.Any()) return BadRequest();
-
+            
             foreach (var singleTopic in listSingleTopics)
             {
                 using (var db = new EF_DB_Context())
