@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using MYVote.Models;
 using Newtonsoft.Json;
 
@@ -25,6 +26,19 @@ namespace MyQuizBackend
                 }
             }
             return false;
+        }
+
+        public static long getClientIDfromHeader(HttpRequest request)
+        {
+            long deviceID;
+            try
+            {
+                return deviceID = Convert.ToInt64(request.Headers["DeviceID"].ToString());
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
     }
 }

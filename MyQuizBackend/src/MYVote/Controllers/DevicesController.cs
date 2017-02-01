@@ -94,17 +94,18 @@ namespace MyQuizBackend.Controllers
 
         // DELETE api/devices/id
         [HttpDelete("{id}")]
-        public void DeleteDevice(int id)
+        public IActionResult DeleteDevice(int id)
         {
-            var deviceID = Convert.ToInt64(Request.Headers["DeviceID"].ToString());
-            if (DeviceAuthentification.authenticateAdminDeviceByDeviceID(deviceID) == false) return;
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            if (deviceID < 0 || DeviceAuthentification.authenticateAdminDeviceByDeviceID(deviceID) == false) return Unauthorized();
 
             using (var db = new EF_DB_Context())
             {
                 var check = db.Device.FirstOrDefault(d => d.Id == id);
-                if (check == null) return;
+                if (check == null) return BadRequest("Id not found!");
                 db.Device.Remove(check);
                 db.SaveChanges();
+                return Ok(JsonConvert.SerializeObject(check));
             }
         }
 
