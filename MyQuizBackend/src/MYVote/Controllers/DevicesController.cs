@@ -92,16 +92,15 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/groups")]
         public IActionResult DeviceEnterGroup([FromBody]JObject value)
         {
-
             var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
             
-            Group groupPin; 
+            Group postedGroup; 
 
             if (value == null) return BadRequest();
 
             try
             {
-                groupPin = JsonConvert.DeserializeObject<Group>(value.ToString());
+                postedGroup = JsonConvert.DeserializeObject<Group>(value.ToString());
             }
             catch (Exception)
             {
@@ -110,22 +109,18 @@ namespace MyQuizBackend.Controllers
 
             using (var db = new EF_DB_Context())
             {
-
-                //Device already in DB
                 var deviceGroup = new DeviceGroup();
-                var checkGroup = db.Group.FirstOrDefault(g => g.EnterGroupPin == groupPin.EnterGroupPin);
+                var checkGroup = db.Group.FirstOrDefault(g => g.EnterGroupPin == postedGroup.EnterGroupPin);
                 var checkDevice = db.Device.FirstOrDefault(d => d.Id == deviceID);
                 if (checkGroup != null && checkDevice != null)
                 {
-
-                    if (groupPin == checkGroup)
+                    if (postedGroup.EnterGroupPin == checkGroup.EnterGroupPin)
                     {
-                            deviceGroup.DeviceId = deviceID;
-                            deviceGroup.GroupId = checkGroup.Id;
-                            db.DeviceGroup.Add(deviceGroup);
-
+                        deviceGroup.DeviceId = deviceID;
+                        deviceGroup.GroupId = checkGroup.Id;
+                        db.DeviceGroup.Add(deviceGroup);
+                        db.SaveChanges();
                     }
-
                 }
                 else if (checkGroup == null)
                 {
@@ -135,9 +130,7 @@ namespace MyQuizBackend.Controllers
                 {
                     return BadRequest("Device is not registrated please sign up first!");
                 }
-
                 return Ok(JsonConvert.SerializeObject(deviceGroup));
-
             }
         }
 
