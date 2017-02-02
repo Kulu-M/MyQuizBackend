@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -8,8 +9,9 @@ namespace MYVote.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlite(@"Datasource=C:\Users\Kulu-M\Documents\MyQuizBackend\MyQuizBackend\src\MYVote\Database\MYVote_DB_V2.db");
+            var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVote_DB_V2.db");
+
+            optionsBuilder.UseSqlite(@"Datasource=" + path);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

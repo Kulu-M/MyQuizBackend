@@ -92,6 +92,7 @@ namespace MyQuizBackend.Controllers
         [HttpPost("{id}/groups")]
         public IActionResult DeviceEnterGroup([FromBody]JObject value)
         {
+            //TODO small error when DeviceGroup alreaady exists
             var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
             
             Group postedGroup; 
