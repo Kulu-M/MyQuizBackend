@@ -115,12 +115,22 @@ namespace MyQuizBackend.Controllers
                 var checkDevice = db.Device.FirstOrDefault(d => d.Id == deviceID);
                 if (checkGroup != null && checkDevice != null)
                 {
+                    var checkDeviceGroup = db.DeviceGroup.FirstOrDefault(dg => dg.DeviceId == deviceID && dg.GroupId == checkGroup.Id);
+                    if (checkDeviceGroup != null)
+                    {
+                        return BadRequest("Device already exists in Group");
+                    }
+
                     if (postedGroup.EnterGroupPin == checkGroup.EnterGroupPin)
                     {
-                        deviceGroup.DeviceId = deviceID;
-                        deviceGroup.GroupId = checkGroup.Id;
-                        db.DeviceGroup.Add(deviceGroup);
-                        db.SaveChanges();
+                            deviceGroup.DeviceId = deviceID;
+                            deviceGroup.GroupId = checkGroup.Id;
+                            db.DeviceGroup.Add(deviceGroup);
+                            db.SaveChanges();
+                    }
+                    else
+                    {
+                        return BadRequest("Wrong GroupPin");
                     }
                 }
                 else if (checkGroup == null)
