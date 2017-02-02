@@ -15,12 +15,38 @@ namespace MyQuizBackend.Controllers
     public class QuestionBlockController : Controller
     {
         #region GET
-
-        // GET: api/values
+        
+        // GET api/questionBlock/
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult GetAllQuestionBlocks()
         {
-            return new string[] { "value1", "value2" };
+            List<QuestionBlock> questionBlockList = new List<QuestionBlock>();
+            using (var db = new EF_DB_Context())
+            {
+                foreach (var questionBlockInDb in db.QuestionBlock)
+                {
+                    var questionsFinder =
+                    from q in db.QuestionQuestionBlock
+                    where q.QuestionBlockId == questionBlockInDb.Id
+                    select q.QuestionId;
+
+                    var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2 == q.Id));
+
+                    foreach (var question in questionList)
+                    {
+                        var answerOptionsFinder = from a in db.QuestionAnswerOption
+                                                  where a.QuestionId == question.Id
+                                                  select a.AnswerOptionId;
+
+                        question.answerList = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
+                    }
+
+                    questionBlockInDb.questionList = questionList.ToList();
+                    questionBlockList.Add(questionBlockInDb);
+                }
+                
+                return Ok(JsonConvert.SerializeObject(questionBlockList));
+            }
         }
 
         // GET api/questionBlock/:id
@@ -47,8 +73,8 @@ namespace MyQuizBackend.Controllers
 
                     question.answerList = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
                 }
-
                 questionBlockInDb.questionList = questionList.ToList();
+                
                 return Ok(JsonConvert.SerializeObject(questionBlockInDb));
             }
         }
