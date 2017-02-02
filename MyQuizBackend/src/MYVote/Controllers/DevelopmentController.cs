@@ -49,38 +49,38 @@ namespace MyQuizBackend.Controllers
         [HttpGet("questionBlock")]
         public IActionResult GetQb()
         {
-            QuestionBlock qb = new QuestionBlock();
-            qb.Title = "DevelopmentQuestionBlock";
-            var question1 = new Question();
-            question1.Text = "Hallo";
-            question1.MultipleChoice = 0;
-            question1.Category = "quiz";
-            var answer1 = new AnswerOption();
-            answer1.Text = "Möglichkeit1";
-            answer1.TrueFalse = "false";
-            var answer2 = new AnswerOption();
-            answer2.Text = "Möglichkeit2";
-            answer2.TrueFalse = "true";
-            question1.answerList.Add(answer1);
-            question1.answerList.Add(answer2);
+            //QuestionBlock qb = new QuestionBlock();
+            //qb.Title = "DevelopmentQuestionBlock";
+            //var question1 = new Question();
+            //question1.Text = "Hallo";
+            //question1.MultipleChoice = 0;
+            //question1.Category = "quiz";
+            //var answer1 = new AnswerOption();
+            //answer1.Text = "Möglichkeit1";
+            //answer1.TrueFalse = "false";
+            //var answer2 = new AnswerOption();
+            //answer2.Text = "Möglichkeit2";
+            //answer2.TrueFalse = "true";
+            //question1.answerList.Add(answer1);
+            //question1.answerList.Add(answer2);
 
-            var question2 = new Question();
-            question2.Text = "Welt";
-            question2.MultipleChoice = 1;
-            question2.Category = "poll";
-            var answer3 = new AnswerOption();
-            answer3.Text = "Möglichkeit3";
-            answer3.TrueFalse = "false";
-            var answer4 = new AnswerOption();
-            answer4.Text = "Möglichkeit4";
-            answer4.TrueFalse = "true";
-            question2.answerList.Add(answer3);
-            question2.answerList.Add(answer4);
+            //var question2 = new Question();
+            //question2.Text = "Welt";
+            //question2.MultipleChoice = 1;
+            //question2.Category = "poll";
+            //var answer3 = new AnswerOption();
+            //answer3.Text = "Möglichkeit3";
+            //answer3.TrueFalse = "false";
+            //var answer4 = new AnswerOption();
+            //answer4.Text = "Möglichkeit4";
+            //answer4.TrueFalse = "true";
+            //question2.answerList.Add(answer3);
+            //question2.answerList.Add(answer4);
 
-            qb.questionList.Add(question1);
-            qb.questionList.Add(question2);
+            //qb.questionList.Add(question1);
+            //qb.questionList.Add(question2);
 
-            return Ok(JsonConvert.SerializeObject(qb));
+            return Ok();
         }
 
         // GET: api/answerOption

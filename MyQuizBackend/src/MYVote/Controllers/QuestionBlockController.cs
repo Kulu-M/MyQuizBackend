@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -124,11 +125,62 @@ namespace MyQuizBackend.Controllers
         }
 
         #endregion POST
-        
-        // DELETE api/values/5
+
+        #region DELETE
+
+        // DELETE api/questionBlock/:id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeleteQuestionBlock(int id)
         {
+            using (var db = new EF_DB_Context())
+            {
+                var questionBlockInDb = db.QuestionBlock.FirstOrDefault(qb => qb.Id == id);
+                if (questionBlockInDb == null) return BadRequest("Id not found!");
+
+                db.QuestionBlock.Remove(questionBlockInDb);
+
+                //TODO
+                IQueryable<QuestionAnswerOption> questionAnswerOptionsToDelete;
+
+                var questionsFinder =
+                    from q in db.QuestionQuestionBlock
+                    where q.QuestionBlockId == questionBlockInDb.Id
+                    select q;
+
+                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id));
+
+                foreach (var question in questionList)
+                {
+                    questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
+                                              where a.QuestionId == question.Id
+                                              select a);
+
+                    //Delete from AnswerOption
+                    db.AnswerOption.RemoveRange(db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.Id == a.Id)));
+
+                    //Delete from QuestionAnswerOption
+                    db.QuestionAnswerOption.RemoveRange(from a in db.QuestionAnswerOption
+                                                        where a.QuestionId == question.Id
+                                                        select a);
+                }
+
+                //Delete from Question
+                db.Question.RemoveRange(db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id)));
+
+                //Delete from QuestionQuestionBlock
+                db.QuestionQuestionBlock.RemoveRange(from q in db.QuestionQuestionBlock
+                                                     where q.QuestionBlockId == questionBlockInDb.Id
+                                                     select q);
+
+                //Delete the QuestionBlock
+                db.QuestionBlock.Remove(db.QuestionBlock.FirstOrDefault(b => b.Id == id)) ;
+
+                db.SaveChanges();
+
+                return Ok("Deleted: " + id);
+            }
         }
+
+        #endregion DELETE
     }
 }
