@@ -88,6 +88,59 @@ namespace MyQuizBackend.Controllers
             }
         }
 
+        // POST api/devices
+        [HttpPost]
+        public IActionResult DeviceEnterGroup([FromBody]JObject value)
+        {
+
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            
+            Group groupPin; 
+
+            if (value == null) return BadRequest();
+
+            try
+            {
+                groupPin = JsonConvert.DeserializeObject<Group>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Cannot deserialize your input!");
+            }
+
+            using (var db = new EF_DB_Context())
+            {
+                
+                //Device already in DB
+                var checkGroup = db.Group.FirstOrDefault(g => g.EnterGroupPin == groupPin.EnterGroupPin);
+                var checkDevice = db.Device.FirstOrDefault(d => d.Id == deviceID);
+                if (checkGroup != null && checkDevice != null)
+                {
+                    var deviceGroup = new DeviceGroup();
+
+                    if (groupPin == checkGroup)
+                    {
+                            deviceGroup.DeviceId = deviceID;
+                            deviceGroup.GroupId = checkGroup.Id;
+                            db.DeviceGroup.Add(deviceGroup);
+
+                    }
+                    return Ok(JsonConvert.SerializeObject(deviceGroup));
+
+                }
+                else if (checkGroup == null)
+                {
+                    return BadRequest("Group does not exist!");
+                }
+                else if (checkDevice == null)
+                {
+                    return BadRequest("Device is not registrated please sign up first!");
+                }
+
+
+            }
+        }
+
         #endregion POST
 
         #region DELETE
