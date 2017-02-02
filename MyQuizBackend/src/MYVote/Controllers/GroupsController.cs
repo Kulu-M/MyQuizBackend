@@ -61,17 +61,27 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public IActionResult CreateOrUpdateGroup([FromBody]JObject value)
         {
+            Group group;
             if (value == null) return BadRequest();
-            var group = JsonConvert.DeserializeObject<Group>(value.ToString());
+            try
+            {
+                group = JsonConvert.DeserializeObject<Group>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+            
             using (var db = new EF_DB_Context())
             {
-                var existingGroup = db.Group.First(gr => gr.Id == group.Id);
+                var existingGroup = db.Group.FirstOrDefault(gr => gr.Id == group.Id);
                 if (existingGroup == null)
                 {
                     db.Group.Add(group);
                     db.SaveChanges();
                 }
-                existingGroup = @group;
+                existingGroup.EnterGroupPin = group.EnterGroupPin;
+                existingGroup.Title = group.Title;
                 db.SaveChanges();
                 return Ok(JsonConvert.SerializeObject(group));
             }
