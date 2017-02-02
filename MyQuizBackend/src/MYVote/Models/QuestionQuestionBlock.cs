@@ -10,9 +10,9 @@ namespace MYVote.Models
     {
         [Column("ID")]
         public long Id { get; set; }
-        [Column("QuestionID")]
-        public long QuestionId { get; set; }
         [Column("QuestionBlockID")]
-        public long QuestionBlockId { get; set; }
+        public long? QuestionBlockId { get; set; }
+        [Column("QuestionID")]
+        public long? QuestionId { get; set; }
     }
 }

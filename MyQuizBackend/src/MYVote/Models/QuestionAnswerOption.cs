@@ -11,8 +11,8 @@ namespace MYVote.Models
         [Column("ID")]
         public long Id { get; set; }
         [Column("QuestionID")]
-        public long QuestionId { get; set; }
+        public long? QuestionId { get; set; }
         [Column("AnswerOptionID")]
-        public long AnswerOptionId { get; set; }
+        public long? AnswerOptionId { get; set; }
     }
 }

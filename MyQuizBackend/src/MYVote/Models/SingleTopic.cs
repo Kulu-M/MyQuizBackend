@@ -9,6 +9,7 @@ namespace MYVote.Models
     {
         [Column("ID")]
         public long Id { get; set; }
-        public string String { get; set; }
+        public string Name { get; set; }
+        public string DateTime { get; set; }
     }
 }

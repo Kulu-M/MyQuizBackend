@@ -10,9 +10,9 @@ namespace MYVote.Models
     {
         [Column("ID")]
         public long Id { get; set; }
-        [Column("GroupID")]
-        public long GroupId { get; set; }
         [Column("SingleTopicID")]
-        public long SingleTopicId { get; set; }
+        public long? SingleTopicId { get; set; }
+        [Column("GroupID")]
+        public long? GroupId { get; set; }
     }
 }

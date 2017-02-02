@@ -20,10 +20,10 @@ namespace MyQuizBackend.Controllers
             List<SingleTopic> singleTopicList = new List<SingleTopic>();
 
             var singleTopic = new SingleTopic();
-            singleTopic.String = "Lloyd";
+            singleTopic.Name = "Lloyd";
 
             var singleTopic2 = new SingleTopic();
-            singleTopic2.String = "Marius";
+            singleTopic2.Name = "Marius";
 
             singleTopicList.Add(singleTopic);
             singleTopicList.Add(singleTopic2);

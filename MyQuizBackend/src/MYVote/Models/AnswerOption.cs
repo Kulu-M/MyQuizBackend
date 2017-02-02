@@ -10,7 +10,6 @@ namespace MYVote.Models
         [Column("ID")]
         public long Id { get; set; }
         public string Text { get; set; }
-        [Column("True/False")]
-        public string TrueFalse { get; set; }
+        public string IsCorrect { get; set; }
     }
 }

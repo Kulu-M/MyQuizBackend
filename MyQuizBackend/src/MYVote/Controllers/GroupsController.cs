@@ -40,19 +40,7 @@ namespace MyQuizBackend.Controllers
                 return Ok(JsonConvert.SerializeObject(singleTopics));
             }
         }
-
-        // GET api/groups/id/questions
-        [HttpGet("{id}/questions")]
-        public IActionResult GetAllFinalQuestionsForGroupId(int id)
-        {
-            using (var db = new EF_DB_Context())
-            {
-               var finalQuestionsForGroupId = db.FinalQuestion.Where(fq => fq.GroupId == id);
-
-               return Ok(JsonConvert.SerializeObject(finalQuestionsForGroupId));
-            }
-        }
-
+        
         #endregion GET
 
         #region POST

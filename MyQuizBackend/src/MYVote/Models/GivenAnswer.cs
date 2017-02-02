@@ -9,12 +9,18 @@ namespace MYVote.Models
     {
         [Column("ID")]
         public long Id { get; set; }
+        [Column("DeviceID")]
+        public long DeviceId { get; set; }
         [Column("GroupID")]
-        public long? GroupId { get; set; }
+        public long GroupId { get; set; }
+        [Column("SingleTopicID")]
+        public long SingleTopicId { get; set; }
+        [Column("QuestionBlockID")]
+        public long QuestionBlockId { get; set; }
         [Column("QuestionID")]
-        public long? QuestionId { get; set; }
-        [Column("FinalQuestionID")]
-        public long? FinalQuestionId { get; set; }
-        public string DateNow { get; set; }
+        public long QuestionId { get; set; }
+        [Column("AnswerOptionID")]
+        public long AnswerOptionId { get; set; }
+        public string TimeStamp { get; set; }
     }
 }

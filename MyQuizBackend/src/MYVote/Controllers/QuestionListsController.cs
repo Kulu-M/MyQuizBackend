@@ -21,12 +21,13 @@ namespace MyQuizBackend.Controllers
         [HttpGet("{id}")]
         public IActionResult GetPreparedFinalQuestion(int id)
         {
-            using (var db = new EF_DB_Context())
-            {
-                var finalQ = db.FinalQuestion.FirstOrDefault(fq => fq.Id == id);
-                if (finalQ == null) return NotFound();
-                return Ok(JsonConvert.SerializeObject(finalQ));
-            }
+            //using (var db = new EF_DB_Context())
+            //{
+            //    var finalQ = db.FinalQuestion.FirstOrDefault(fq => fq.Id == id);
+            //    if (finalQ == null) return NotFound();
+            //    return Ok(JsonConvert.SerializeObject(finalQ));
+            //}
+            return null;
         }
 
         #endregion GET

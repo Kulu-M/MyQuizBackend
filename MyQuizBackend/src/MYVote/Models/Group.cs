@@ -10,7 +10,6 @@ namespace MYVote.Models
         [Column("ID")]
         public long Id { get; set; }
         public string Title { get; set; }
-        [Column("EnterGroupPIN")]
-        public long? EnterGroupPin { get; set; }
+        public string EnterGroupPin { get; set; }
     }
 }
