@@ -131,7 +131,7 @@ namespace MyQuizBackend.Controllers
                 {
                     return BadRequest("Device is not registrated please sign up first!");
                 }
-                return Ok(JsonConvert.SerializeObject(deviceGroup));
+                return Ok(JsonConvert.SerializeObject(checkGroup));
             }
         }
 
