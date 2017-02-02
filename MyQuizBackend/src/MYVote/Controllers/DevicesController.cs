@@ -89,7 +89,7 @@ namespace MyQuizBackend.Controllers
         }
 
         // POST api/devices
-        [HttpPost]
+        [HttpPost("{id}/groups")]
         public IActionResult DeviceEnterGroup([FromBody]JObject value)
         {
 
@@ -110,13 +110,13 @@ namespace MyQuizBackend.Controllers
 
             using (var db = new EF_DB_Context())
             {
-                
+
                 //Device already in DB
+                var deviceGroup = new DeviceGroup();
                 var checkGroup = db.Group.FirstOrDefault(g => g.EnterGroupPin == groupPin.EnterGroupPin);
                 var checkDevice = db.Device.FirstOrDefault(d => d.Id == deviceID);
                 if (checkGroup != null && checkDevice != null)
                 {
-                    var deviceGroup = new DeviceGroup();
 
                     if (groupPin == checkGroup)
                     {
@@ -125,7 +125,6 @@ namespace MyQuizBackend.Controllers
                             db.DeviceGroup.Add(deviceGroup);
 
                     }
-                    return Ok(JsonConvert.SerializeObject(deviceGroup));
 
                 }
                 else if (checkGroup == null)
@@ -137,6 +136,7 @@ namespace MyQuizBackend.Controllers
                     return BadRequest("Device is not registrated please sign up first!");
                 }
 
+                return Ok(JsonConvert.SerializeObject(deviceGroup));
 
             }
         }
