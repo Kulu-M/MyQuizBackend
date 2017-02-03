@@ -10,6 +10,8 @@ namespace MyQuizBackend
 {
     public class DeviceAuthentification
     {
+        #region Admin-Authentification
+
         public static bool authenticateAdminDeviceByPassword(string inputPassword)
         {
             return inputPassword == Constants.adminPassword;
@@ -28,17 +30,22 @@ namespace MyQuizBackend
             return false;
         }
 
+        #endregion Admin-Authentification
+
+        #region Client-Authentification
+
         public static long getClientIDfromHeader(HttpRequest request)
         {
-            long deviceID;
             try
             {
-                return deviceID = Convert.ToInt64(request.Headers["DeviceID"].ToString());
+                return Convert.ToInt64(request.Headers["DeviceID"].ToString());
             }
             catch (Exception)
             {
                 return -1;
             }
         }
+
+        #endregion Client-Authentification
     }
 }

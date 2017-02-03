@@ -62,13 +62,7 @@ namespace MyQuizBackend.Controllers
 
         #endregion POST
 
-        // PUT api/questions/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        #region DELETE
+       #region DELETE
         
         // DELETE api/questions/id
         [HttpDelete("{id}")]

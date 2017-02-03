@@ -104,7 +104,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/groups/{id}/topics
         [HttpPost("{id}/topics")]
-        public IActionResult Post(int id, [FromBody]JArray value)
+        public IActionResult PostNewTopicToGroup(int id, [FromBody]JArray value)
         {
             List<SingleTopic> listSingleTopics;
             if (value == null) return BadRequest();
@@ -122,7 +122,7 @@ namespace MyQuizBackend.Controllers
             {
                 using (var db = new EF_DB_Context())
                 {
-                    //SaveChanges needs to be called inbetween to let the Database give the new entity and ID
+                    //SaveChanges needs to be called inbetween to let the Database give the new entity an ID
                     db.SingleTopic.Add(singleTopic);
                     db.SaveChanges();
 
@@ -134,21 +134,10 @@ namespace MyQuizBackend.Controllers
                     db.SaveChanges();
                 }
             }
-            
             return Ok();
         }
 
         #endregion POST
-
-        #region PUT
-
-        // PUT api/groups/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        #endregion PUT
 
         #region DELETE
 
