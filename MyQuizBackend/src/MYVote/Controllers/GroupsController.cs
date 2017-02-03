@@ -80,7 +80,7 @@ namespace MyQuizBackend.Controllers
         public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
         {
             var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
-            if (deviceID < 0) return Unauthorized();
+            if (deviceID < 0) return BadRequest();
 
             GivenAnswer givenAnswer;
             if (value == null) return BadRequest();

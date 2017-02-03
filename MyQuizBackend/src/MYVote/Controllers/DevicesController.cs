@@ -19,21 +19,7 @@ namespace MyQuizBackend.Controllers
     public class DevicesController : Controller
     {
         #region GET
-
-        // GET: api/devices
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "devices", "controller" };
-        }
-
-        // GET api/devices/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        
         #endregion GET
 
         #region POST
@@ -93,7 +79,8 @@ namespace MyQuizBackend.Controllers
         public IActionResult DeviceEnterGroup([FromBody]JObject value)
         {
             var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
-            
+            if (deviceID < 0) return BadRequest();
+
             Group postedGroup; 
 
             if (value == null) return BadRequest();

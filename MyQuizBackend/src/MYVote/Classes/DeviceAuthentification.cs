@@ -38,7 +38,7 @@ namespace MyQuizBackend
         {
             try
             {
-                return Convert.ToInt64(request.Headers["DeviceID"].ToString());
+                return Convert.ToInt64(request.Headers[Constants.deviceIdHeaderKey].ToString());
             }
             catch (Exception)
             {
