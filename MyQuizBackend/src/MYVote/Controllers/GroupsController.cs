@@ -160,14 +160,13 @@ namespace MyQuizBackend.Controllers
 
                 //Delete from SingleTopic
                 db.SingleTopic.RemoveRange(singleTopicToDelete);
-                db.SaveChanges();
 
                 //Delete from GroupSingleTopic
                 db.GroupSingleTopic.RemoveRange(groupSingleTopicsToDelete);
-                db.SaveChanges();
 
                 //Delete the Group
                 db.Group.Remove(groupToDelete);
+
                 db.SaveChanges();
                 
                 return Ok(JsonConvert.SerializeObject(groupToDelete));
