@@ -14,6 +14,8 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : Controller
     {
+        //TODO this controller might be redundant
+
         #region GET
 
         // GET api/questions

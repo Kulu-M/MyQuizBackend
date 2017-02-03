@@ -139,7 +139,6 @@ namespace MyQuizBackend.Controllers
 
                 db.QuestionBlock.Remove(questionBlockInDb);
 
-                //TODO
                 IQueryable<QuestionAnswerOption> questionAnswerOptionsToDelete;
 
                 var questionsFinder =

@@ -147,10 +147,29 @@ namespace MyQuizBackend.Controllers
         {
             using (var db = new EF_DB_Context())
             {
+                //Get Group
                 var groupToDelete = db.Group.FirstOrDefault(gr => gr.Id == id);
                 if (groupToDelete == null) return StatusCode(404);
+
+                //Get GroupSingleTopics to delete
+                var groupSingleTopicsToDelete = (from gst in db.GroupSingleTopic where gst.GroupId == id select gst);
+
+                //Get SingleTopics to delete
+                var singleTopicToDelete =
+                    db.SingleTopic.Where(st => groupSingleTopicsToDelete.Any(st2 => st2.SingleTopicId == st.Id));
+
+                //Delete from SingleTopic
+                db.SingleTopic.RemoveRange(singleTopicToDelete);
+                db.SaveChanges();
+
+                //Delete from GroupSingleTopic
+                db.GroupSingleTopic.RemoveRange(groupSingleTopicsToDelete);
+                db.SaveChanges();
+
+                //Delete the Group
                 db.Group.Remove(groupToDelete);
                 db.SaveChanges();
+                
                 return Ok(JsonConvert.SerializeObject(groupToDelete));
             }
         }
