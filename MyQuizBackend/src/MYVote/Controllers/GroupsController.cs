@@ -16,6 +16,7 @@ namespace MyQuizBackend.Controllers
     {
         #region GET
         
+        // Get all Groups
         // GET api/groups
         [HttpGet]
         public IActionResult GetAllGroups()
@@ -23,7 +24,36 @@ namespace MyQuizBackend.Controllers
             using (var db = new EF_DB_Context())
             {
                 var groups = from gr in db.Group select gr;
+
+                foreach (var g in groups)
+                {
+                    var groupSingleTopics = from gst in db.GroupSingleTopic
+                        where gst.GroupId == g.Id
+                        select gst;
+
+                    g.topicList = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+                }
                 return Ok(JsonConvert.SerializeObject(groups));
+            }
+        }
+
+        // Get one Group by its ID
+        // GET api/groups/id
+        [HttpGet("{id}")]
+        public IActionResult GetGroupById(int id)
+        {
+            using (var db = new EF_DB_Context())
+            {
+                var g = db.Group.FirstOrDefault(gr => gr.Id == id);
+                if (g == null) return BadRequest("No such group!");
+
+                var groupSingleTopics = from gst in db.GroupSingleTopic
+                                        where gst.GroupId == g.Id
+                                        select gst;
+
+                g.topicList = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+
+                return Ok(JsonConvert.SerializeObject(g));
             }
         }
 
@@ -65,41 +95,30 @@ namespace MyQuizBackend.Controllers
                 var existingGroup = db.Group.FirstOrDefault(gr => gr.Id == group.Id);
                 if (existingGroup == null)
                 {
+                    //Create new Group
                     db.Group.Add(group);
                     db.SaveChanges();
+
+                    foreach (var topic in group.topicList)
+                    {
+                        db.SingleTopic.Add(topic);
+                        db.SaveChanges();
+
+                        var groupSingleTopic = new GroupSingleTopic
+                        {
+                            GroupId = group.Id,
+                            SingleTopicId = topic.Id
+                        };
+                        db.GroupSingleTopic.Add(groupSingleTopic);
+                    }
                 }
+                
+                //Update existing Group
                 existingGroup.EnterGroupPin = group.EnterGroupPin;
                 existingGroup.Title = group.Title;
                 db.SaveChanges();
                 return Ok(JsonConvert.SerializeObject(group));
             }
-        }
-
-        // POST api/groups/{id}/questions/{questionId}/answers
-        [HttpPost("{id}/questions/{questionId}/answers")]
-        public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
-        {
-            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
-            if (deviceID < 0) return BadRequest();
-
-            GivenAnswer givenAnswer;
-            if (value == null) return BadRequest();
-            try
-            {
-                givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
-            }
-            catch (Exception)
-            {
-                return BadRequest("Could not deserialize!");
-            }
-            if (givenAnswer == null) return BadRequest();
-
-            using (var db = new EF_DB_Context())
-            {
-                db.GivenAnswer.Add(givenAnswer);
-                db.SaveChanges();
-            }
-            return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
         // POST api/groups/{id}/topics
@@ -137,6 +156,33 @@ namespace MyQuizBackend.Controllers
             return Ok();
         }
 
+        // POST api/groups/{id}/questions/{questionId}/answers
+        [HttpPost("{id}/questions/{questionId}/answers")]
+        public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
+        {
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            if (deviceID < 0) return BadRequest();
+
+            GivenAnswer givenAnswer;
+            if (value == null) return BadRequest();
+            try
+            {
+                givenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+            if (givenAnswer == null) return BadRequest();
+
+            using (var db = new EF_DB_Context())
+            {
+                db.GivenAnswer.Add(givenAnswer);
+                db.SaveChanges();
+            }
+            return Ok(JsonConvert.SerializeObject(givenAnswer));
+        }
+
         #endregion POST
 
         #region DELETE
@@ -152,7 +198,7 @@ namespace MyQuizBackend.Controllers
                 if (groupToDelete == null) return StatusCode(404);
 
                 //Get GroupSingleTopics to delete
-                var groupSingleTopicsToDelete = (from gst in db.GroupSingleTopic where gst.GroupId == id select gst);
+                var groupSingleTopicsToDelete = from gst in db.GroupSingleTopic where gst.GroupId == id select gst;
 
                 //Get SingleTopics to delete
                 var singleTopicToDelete =
