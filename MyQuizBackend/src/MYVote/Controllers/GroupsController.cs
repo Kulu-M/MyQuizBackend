@@ -57,6 +57,7 @@ namespace MyQuizBackend.Controllers
             }
         }
 
+        //TODO Deprecated
         // GET api/groups/id/topics
         [HttpGet("{id}/topics")]
         public IActionResult GetAllTopicsForId(int id)
@@ -121,6 +122,7 @@ namespace MyQuizBackend.Controllers
             }
         }
 
+        //TODO Deprecated
         // POST api/groups/{id}/topics
         [HttpPost("{id}/topics")]
         public IActionResult PostNewTopicToGroup(int id, [FromBody]JArray value)
@@ -191,6 +193,9 @@ namespace MyQuizBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteGroup(int id)
         {
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            if (deviceID < 0 || DeviceAuthentification.authenticateAdminDeviceByDeviceID(deviceID) == false) return Unauthorized();
+
             using (var db = new EF_DB_Context())
             {
                 //Get Group

@@ -14,7 +14,7 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : Controller
     {
-        //TODO this controller might be redundant
+        //TODO this controller is deprecated
 
         #region GET
 
