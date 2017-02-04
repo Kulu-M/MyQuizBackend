@@ -7,6 +7,6 @@ namespace MYVote.Models
 {
     public partial class Group
     {
-        public List<SingleTopic> topicList = new List<SingleTopic>();
+        public List<SingleTopic> SingleTopics = new List<SingleTopic>();
     }
 }

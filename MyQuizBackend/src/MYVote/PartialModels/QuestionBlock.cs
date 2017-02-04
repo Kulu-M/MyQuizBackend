@@ -8,6 +8,6 @@ namespace MYVote.Models
 {
     public partial class QuestionBlock
     {
-        public List<Question> questionList = new List<Question>();
+        public List<Question> Questions = new List<Question>();
     }
 }

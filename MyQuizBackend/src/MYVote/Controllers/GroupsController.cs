@@ -31,7 +31,7 @@ namespace MyQuizBackend.Controllers
                         where gst.GroupId == g.Id
                         select gst;
 
-                    g.topicList = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+                    g.SingleTopics = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
                 }
                 return Ok(JsonConvert.SerializeObject(groups));
             }
@@ -51,7 +51,7 @@ namespace MyQuizBackend.Controllers
                                         where gst.GroupId == g.Id
                                         select gst;
 
-                g.topicList = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+                g.SingleTopics = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
 
                 return Ok(JsonConvert.SerializeObject(g));
             }
@@ -100,7 +100,7 @@ namespace MyQuizBackend.Controllers
                     db.Group.Add(group);
                     db.SaveChanges();
 
-                    foreach (var topic in group.topicList)
+                    foreach (var topic in group.SingleTopics)
                     {
                         db.SingleTopic.Add(topic);
                         db.SaveChanges();

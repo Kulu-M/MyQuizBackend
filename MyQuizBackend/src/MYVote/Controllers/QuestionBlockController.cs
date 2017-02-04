@@ -39,10 +39,10 @@ namespace MyQuizBackend.Controllers
                                                   where a.QuestionId == question.Id
                                                   select a.AnswerOptionId;
 
-                        question.answerList = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
+                        question.AnswerOptions = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
                     }
 
-                    questionBlockInDb.questionList = questionList.ToList();
+                    questionBlockInDb.Questions = questionList.ToList();
                     questionBlockList.Add(questionBlockInDb);
                 }
                 
@@ -72,9 +72,9 @@ namespace MyQuizBackend.Controllers
                         where a.QuestionId == question.Id
                         select a.AnswerOptionId;
 
-                    question.answerList = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
+                    question.AnswerOptions = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
                 }
-                questionBlockInDb.questionList = questionList.ToList();
+                questionBlockInDb.Questions = questionList.ToList();
                 
                 return Ok(JsonConvert.SerializeObject(questionBlockInDb));
             }
@@ -149,12 +149,12 @@ namespace MyQuizBackend.Controllers
                 db.QuestionBlock.Add(questionBlock);
                 db.SaveChanges();
 
-                foreach (var question in questionBlock.questionList)
+                foreach (var question in questionBlock.Questions)
                 {
                     db.Question.Add(question);
                     db.SaveChanges();
 
-                    foreach (var answerOption in question.answerList)
+                    foreach (var answerOption in question.AnswerOptions)
                     {
                         db.AnswerOption.Add(answerOption);
                         db.SaveChanges();
