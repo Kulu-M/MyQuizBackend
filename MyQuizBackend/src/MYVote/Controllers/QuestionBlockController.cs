@@ -95,7 +95,7 @@ namespace MyQuizBackend.Controllers
             {
                 questionBlock = JsonConvert.DeserializeObject<QuestionBlock>(value.ToString());
             }
-            catch (Exception e)
+            catch (Exception)
             {
                return BadRequest("Could not deserialize!");
             }
