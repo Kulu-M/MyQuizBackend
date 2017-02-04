@@ -88,9 +88,62 @@ namespace MyQuizBackend.Controllers
         [HttpPost]
         public IActionResult PostNewQuestionBlock([FromBody] JObject value)
         {
+            var questionBlock = new QuestionBlock();
+            var existingQuestionBlock = new QuestionBlock();
             if (value == null) return BadRequest();
-            var questionBlock = JsonConvert.DeserializeObject<QuestionBlock>(value.ToString());
+            try
+            {
+                questionBlock = JsonConvert.DeserializeObject<QuestionBlock>(value.ToString());
+            }
+            catch (Exception e)
+            {
+               return BadRequest("Could not deserialize!");
+            }
+            
+            using (var db = new EF_DB_Context())
+            {
+                existingQuestionBlock = db.QuestionBlock.FirstOrDefault(qb => qb.Id == questionBlock.Id);
+            }
+            //QuestionBlock is new
+            if (existingQuestionBlock == null)
+                {
+                    saveNewQuestionBlockToDatabase(questionBlock);
+                }
 
+                //QuestionBlock already exists in Database
+                else
+                {
+                    removeQuestionBlockFromDatabase(existingQuestionBlock);
+                    saveNewQuestionBlockToDatabase(questionBlock);
+                }
+            return Ok(JsonConvert.SerializeObject(questionBlock));
+        }
+        
+        #endregion POST
+
+        #region DELETE
+
+        // DELETE api/questionBlock/:id
+        [HttpDelete("{id}")]
+        public IActionResult DeleteQuestionBlock(int id)
+        {
+            using (var db = new EF_DB_Context())
+            {
+                var questionBlockInDb = db.QuestionBlock.FirstOrDefault(qb => qb.Id == id);
+                if (questionBlockInDb == null) return BadRequest("Id not found!");
+
+                removeQuestionBlockFromDatabase(questionBlockInDb);
+                
+                return Ok("Deleted: " + id);
+            }
+        }
+
+        #endregion DELETE
+
+        #region LOGIC
+
+        public QuestionBlock saveNewQuestionBlockToDatabase(QuestionBlock questionBlock)
+        {
             using (var db = new EF_DB_Context())
             {
                 db.QuestionBlock.Add(questionBlock);
@@ -121,24 +174,13 @@ namespace MyQuizBackend.Controllers
                     db.SaveChanges();
                 }
             }
-            return Ok(JsonConvert.SerializeObject(questionBlock));
+            return questionBlock;
         }
 
-        #endregion POST
-
-        #region DELETE
-
-        // DELETE api/questionBlock/:id
-        [HttpDelete("{id}")]
-        public IActionResult DeleteQuestionBlock(int id)
+        private void removeQuestionBlockFromDatabase(QuestionBlock questionBlockInDb)
         {
             using (var db = new EF_DB_Context())
             {
-                var questionBlockInDb = db.QuestionBlock.FirstOrDefault(qb => qb.Id == id);
-                if (questionBlockInDb == null) return BadRequest("Id not found!");
-
-                db.QuestionBlock.Remove(questionBlockInDb);
-
                 IQueryable<QuestionAnswerOption> questionAnswerOptionsToDelete;
 
                 var questionsFinder =
@@ -151,16 +193,17 @@ namespace MyQuizBackend.Controllers
                 foreach (var question in questionList)
                 {
                     questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
-                                              where a.QuestionId == question.Id
-                                              select a);
+                        where a.QuestionId == question.Id
+                        select a);
 
                     //Delete from AnswerOption
-                    db.AnswerOption.RemoveRange(db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.Id == a.Id)));
+                    db.AnswerOption.RemoveRange(
+                        db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.Id == a.Id)));
 
                     //Delete from QuestionAnswerOption
                     db.QuestionAnswerOption.RemoveRange(from a in db.QuestionAnswerOption
-                                                        where a.QuestionId == question.Id
-                                                        select a);
+                        where a.QuestionId == question.Id
+                        select a);
                 }
 
                 //Delete from Question
@@ -168,18 +211,16 @@ namespace MyQuizBackend.Controllers
 
                 //Delete from QuestionQuestionBlock
                 db.QuestionQuestionBlock.RemoveRange(from q in db.QuestionQuestionBlock
-                                                     where q.QuestionBlockId == questionBlockInDb.Id
-                                                     select q);
+                    where q.QuestionBlockId == questionBlockInDb.Id
+                    select q);
 
                 //Delete the QuestionBlock
-                db.QuestionBlock.Remove(db.QuestionBlock.FirstOrDefault(b => b.Id == id)) ;
+                db.QuestionBlock.Remove(questionBlockInDb);
 
                 db.SaveChanges();
-
-                return Ok("Deleted: " + id);
             }
         }
 
-        #endregion DELETE
+        #endregion LOGIC
     }
 }
