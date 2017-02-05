@@ -24,7 +24,36 @@ namespace MYVote.Models
                 AnswerOption = db.AnswerOption.FirstOrDefault(ao => ao.Id == AnswerOptionId);
                 Question = db.Question.FirstOrDefault(q => q.Id == QuestionId);
                 QuestionBlock = db.QuestionBlock.FirstOrDefault(qb => qb.Id == QuestionBlockId);
+
                 QuestionBlock.fillWithValues();
+            }
+        }
+
+        public void fillIds()
+        {
+            if (Device != null)
+            {
+                DeviceId = Device.Id;
+            }
+            if (Group != null)
+            {
+                GroupId = Group.Id;
+            }
+            if (SingleTopic != null)
+            {
+                SingleTopicId = SingleTopic.Id;
+            }
+            if (AnswerOption != null)
+            {
+                AnswerOptionId = AnswerOption.Id;
+            }
+            if (Question != null)
+            {
+                QuestionId = Question.Id;
+            }
+            if (QuestionBlock != null)
+            {
+                QuestionBlockId = QuestionBlock.Id;
             }
         }
     }
