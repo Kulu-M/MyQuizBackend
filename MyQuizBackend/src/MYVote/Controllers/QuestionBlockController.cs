@@ -26,23 +26,7 @@ namespace MyQuizBackend.Controllers
             {
                 foreach (var questionBlockInDb in db.QuestionBlock)
                 {
-                    var questionsFinder =
-                    from q in db.QuestionQuestionBlock
-                    where q.QuestionBlockId == questionBlockInDb.Id
-                    select q.QuestionId;
-
-                    var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2 == q.Id));
-
-                    foreach (var question in questionList)
-                    {
-                        var answerOptionsFinder = from a in db.QuestionAnswerOption
-                                                  where a.QuestionId == question.Id
-                                                  select a.AnswerOptionId;
-
-                        question.AnswerOptions = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
-                    }
-
-                    questionBlockInDb.Questions = questionList.ToList();
+                    questionBlockInDb.fillWithValues();
                     questionBlockList.Add(questionBlockInDb);
                 }
                 
@@ -59,22 +43,7 @@ namespace MyQuizBackend.Controllers
                 var questionBlockInDb = db.QuestionBlock.FirstOrDefault(qb => qb.Id == id);
                 if (questionBlockInDb == null) return BadRequest("Id not found!");
 
-                var questionsFinder =
-                    from q in db.QuestionQuestionBlock
-                    where q.QuestionBlockId == questionBlockInDb.Id
-                    select q.QuestionId;
-
-                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2 == q.Id));
-
-                foreach (var question in questionList)
-                {
-                    var answerOptionsFinder = from a in db.QuestionAnswerOption
-                        where a.QuestionId == question.Id
-                        select a.AnswerOptionId;
-
-                    question.AnswerOptions = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
-                }
-                questionBlockInDb.Questions = questionList.ToList();
+                questionBlockInDb.fillWithValues();
                 
                 return Ok(JsonConvert.SerializeObject(questionBlockInDb));
             }
