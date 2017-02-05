@@ -40,6 +40,10 @@ namespace MyQuizBackend.Controllers
             {
                 return BadRequest("Cannot deserialize your input!");
             }
+            if (string.IsNullOrWhiteSpace(registration.token) && string.IsNullOrWhiteSpace(registration.password))
+            {
+                return BadRequest("I need at least a token or a password!");
+            }
             
             using (var db = new EF_DB_Context())
             {
