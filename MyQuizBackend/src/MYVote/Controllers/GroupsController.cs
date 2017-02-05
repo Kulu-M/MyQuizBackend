@@ -96,28 +96,15 @@ namespace MyQuizBackend.Controllers
                 var existingGroup = db.Group.FirstOrDefault(gr => gr.Id == group.Id);
                 if (existingGroup == null)
                 {
-                    //Create new Group
-                    db.Group.Add(group);
-                    db.SaveChanges();
-
-                    foreach (var topic in group.SingleTopics)
-                    {
-                        db.SingleTopic.Add(topic);
-                        db.SaveChanges();
-
-                        var groupSingleTopic = new GroupSingleTopic
-                        {
-                            GroupId = group.Id,
-                            SingleTopicId = topic.Id
-                        };
-                        db.GroupSingleTopic.Add(groupSingleTopic);
-                    }
+                    //Group is new
+                    saveNewGroupToDatabase(group);
                 }
-                
-                //Update existing Group
-                existingGroup.EnterGroupPin = group.EnterGroupPin;
-                existingGroup.Title = group.Title;
-                db.SaveChanges();
+                else
+                {
+                    //Group is already in DB (--> update)
+                    removeGroupFromDatabase(group);
+                    saveNewGroupToDatabase(group);
+                }
                 return Ok(JsonConvert.SerializeObject(group));
             }
         }
@@ -196,14 +183,53 @@ namespace MyQuizBackend.Controllers
             var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
             if (deviceID < 0 || DeviceAuthentification.authenticateAdminDeviceByDeviceID(deviceID) == false) return Unauthorized();
 
+            Group groupToDelete;
             using (var db = new EF_DB_Context())
             {
                 //Get Group
-                var groupToDelete = db.Group.FirstOrDefault(gr => gr.Id == id);
+                groupToDelete = db.Group.FirstOrDefault(gr => gr.Id == id);
                 if (groupToDelete == null) return StatusCode(404);
+            }
 
+            removeGroupFromDatabase(groupToDelete, true);
+            
+            return Ok(JsonConvert.SerializeObject(groupToDelete));
+            
+        }
+
+        #endregion DELETE
+
+        #region LOGIC
+
+        public void saveNewGroupToDatabase(Group group)
+        {
+            using (var db = new EF_DB_Context())
+            {
+                //Create new Group
+                db.Group.Add(group);
+                db.SaveChanges();
+
+                foreach (var topic in group.SingleTopics)
+                {
+                    db.SingleTopic.Add(topic);
+                    db.SaveChanges();
+
+                    var groupSingleTopic = new GroupSingleTopic
+                    {
+                        GroupId = group.Id,
+                        SingleTopicId = topic.Id
+                    };
+                    db.GroupSingleTopic.Add(groupSingleTopic);
+                }
+            }
+        }
+
+        public void removeGroupFromDatabase(Group groupToDelete, bool deleteDeviceAndDevicerelations = false)
+        {
+            using (var db = new EF_DB_Context())
+            {
                 //Get GroupSingleTopics to delete
-                var groupSingleTopicsToDelete = from gst in db.GroupSingleTopic where gst.GroupId == id select gst;
+                var groupSingleTopicsToDelete = from gst in db.GroupSingleTopic where gst.GroupId == groupToDelete.Id select gst;
 
                 //Get SingleTopics to delete
                 var singleTopicToDelete =
@@ -215,15 +241,19 @@ namespace MyQuizBackend.Controllers
                 //Delete from GroupSingleTopic
                 db.GroupSingleTopic.RemoveRange(groupSingleTopicsToDelete);
 
+                //Delete relations with Device if Group gets deleted for good
+                if (deleteDeviceAndDevicerelations)
+                {
+                    db.DeviceGroup.RemoveRange(db.DeviceGroup.Where(dg => dg.Id == groupToDelete.Id));
+                }
+
                 //Delete the Group
                 db.Group.Remove(groupToDelete);
 
                 db.SaveChanges();
-                
-                return Ok(JsonConvert.SerializeObject(groupToDelete));
             }
         }
 
-        #endregion DELETE
+        #endregion LOGIC
     }
 }
