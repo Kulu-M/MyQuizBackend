@@ -14,7 +14,7 @@ namespace MYVote.Models
         public Question Question;
         public QuestionBlock QuestionBlock;
 
-        public void fillWithValues()
+        public void fillValues()
         {
             using (var db = new EF_DB_Context())
             {
