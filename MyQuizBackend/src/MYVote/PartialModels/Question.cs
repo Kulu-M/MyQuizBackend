@@ -7,6 +7,6 @@ namespace MYVote.Models
 {
     public partial class Question
     {
-        public List<AnswerOption> answerList = new List<AnswerOption>();
+        public List<AnswerOption> AnswerOptions = new List<AnswerOption>();
     }
 }
