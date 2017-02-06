@@ -26,7 +26,9 @@
         "portable-net45+win8"
       ]
     },
-    "Newtonsoft.Json": "9.0.2-beta2"
+    "Newtonsoft.Json": "9.0.2-beta2",
+    "Microsoft.AspNetCore.WebSockets.Server": "0.1.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0"
   },
 
   "tools": {

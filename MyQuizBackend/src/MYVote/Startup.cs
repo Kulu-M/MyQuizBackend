@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MyQuizBackend.Classes;
 
 namespace MYVote
 {
@@ -42,6 +43,12 @@ namespace MYVote
 
             //Comment this out to stop giving Exception information as HTTP response on requests
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
+            //This is for the SocketsHandler
+            app.Map("/ws", SocketHandler.Map);
+            app.UseStaticFiles();
+            
+
             app.UseMvc();
         }
     }
