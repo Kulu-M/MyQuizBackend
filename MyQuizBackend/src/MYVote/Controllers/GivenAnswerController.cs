@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MyQuizBackend.Classes;
 using MYVote.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -83,16 +84,21 @@ namespace MyQuizBackend.Controllers
             {
                 removeGivenAnswerFromDatabase(existingGivenAnswer);
                 saveGivenAnswerToDatabase(givenAnswer);
+                givenAnswer.fillValues();
                 if (givenAnswer.Device != null && givenAnswer.AnswerOption != null)
                 {
-                    //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor
+                    //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor via socket
+
+                    //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
+
+                    //await SocketHandler.h.EchoLoop();
                 }
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // POST api/givenanswer/:id/publish/
-        [HttpPost("/{id}/publish")]
+        // POST api/givenAnswer/:id/publish/
+        [HttpPost("{id}/publish")]
         public IActionResult PublishGivenAnswerToClients(int id)
         {
             GivenAnswer existingGivenAnswer;
@@ -102,15 +108,15 @@ namespace MyQuizBackend.Controllers
             }
             if (existingGivenAnswer == null) return BadRequest("No data present!");
 
+            //Just for debug purposes
+            //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
+
             //publish to clients via push notification
 
-            //start websocket server to wait for client answers
-
             return Ok();
+
+            //At this point the supervisor app should start a websocket connection to this backend
         }
-
-
-
 
         #endregion POST
 
