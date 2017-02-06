@@ -52,7 +52,7 @@ namespace MyQuizBackend.Controllers
 
         #region POST
         
-        // POST api/values
+        // POST api/givenanswer
         [HttpPost]
         public IActionResult CreateOrUpdateGivenAnswer([FromBody] JObject value)
         {
@@ -83,10 +83,35 @@ namespace MyQuizBackend.Controllers
             {
                 removeGivenAnswerFromDatabase(existingGivenAnswer);
                 saveGivenAnswerToDatabase(givenAnswer);
+                if (givenAnswer.Device != null && givenAnswer.AnswerOption != null)
+                {
+                    //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor
+                }
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
-        
+
+        // POST api/givenanswer/:id/publish/
+        [HttpPost("/{id}/publish")]
+        public IActionResult PublishGivenAnswerToClients(int id)
+        {
+            GivenAnswer existingGivenAnswer;
+            using (var db = new EF_DB_Context())
+            {
+                existingGivenAnswer = db.GivenAnswer.FirstOrDefault(qb => qb.Id == id);
+            }
+            if (existingGivenAnswer == null) return BadRequest("No data present!");
+
+            //publish to clients via push notification
+
+            //start websocket server to wait for client answers
+
+            return Ok();
+        }
+
+
+
+
         #endregion POST
 
         #region DELETE
