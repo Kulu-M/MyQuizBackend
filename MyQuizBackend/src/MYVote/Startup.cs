@@ -46,8 +46,6 @@ namespace MYVote
 
             //This is for the SocketsHandler
             app.Map("/ws", SocketHandler.Map);
-            app.UseStaticFiles();
-            
 
             app.UseMvc();
         }
