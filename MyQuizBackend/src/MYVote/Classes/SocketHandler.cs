@@ -1,52 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace MyQuizBackend.Classes
-{
-    public class SocketHandler
-    {
+namespace MyQuizBackend.Classes {
+    public class SocketHandler {
         public const int BufferSize = 4096;
+        private readonly UTF8Encoding _encoder = new UTF8Encoding();
+        private readonly IVoteConnector _voteConnector;
 
-        WebSocket socket;
+        private readonly WebSocket socket;
+        private bool _finished;
+        private int _remainingTime;
+        private Timer _timer;
 
-        SocketHandler(WebSocket socket)
-        {
+        private SocketHandler(WebSocket socket, HttpContext context) {
             this.socket = socket;
+            _voteConnector = context.RequestServices.GetService<IVoteConnector>();
+            _voteConnector.AddSocketHandler(this);
+            _remainingTime = 30;
         }
 
-        static async Task Acceptor(HttpContext hc, Func<Task> n)
-        {
-            if (!hc.WebSockets.IsWebSocketRequest)
+        private static async Task Acceptor(HttpContext hc, Func<Task> n) {
+            if (!hc.WebSockets.IsWebSocketRequest) {
                 return;
+            }
 
             var socket = await hc.WebSockets.AcceptWebSocketAsync();
-            var h = new SocketHandler(socket);
+            var h = new SocketHandler(socket, hc);
             await h.EchoLoop();
         }
 
-        async Task EchoLoop()
-        {
-            var buffer = new byte[BufferSize];
-            var seg = new ArraySegment<byte>(buffer);
-
-            while (this.socket.State == WebSocketState.Open)
-            {
-                var incoming = await this.socket.ReceiveAsync(seg, CancellationToken.None);
-                var outgoing = new ArraySegment<byte>(buffer, 0, incoming.Count);
-                await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
+        private async Task EchoLoop() {
+            while (socket.State == WebSocketState.Open) {
+                await SendGivenAnswer(_remainingTime.ToString());
+                if (_finished) {
+                    await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    _voteConnector.RemoveSocketHandler(this);
+                }
+                await Task.Delay(1000);
+                _remainingTime -= 1;
+                if (_remainingTime <= 0) {
+                    _finished = true;
+                }
             }
         }
 
-        public static void Map(IApplicationBuilder app)
-        {
+        public async Task SendGivenAnswer(string json) {
+            var buffer = _encoder.GetBytes(json);
+            await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public static void Map(IApplicationBuilder app) {
             app.UseWebSockets();
-            app.Use(SocketHandler.Acceptor);
+            app.Use(Acceptor);
         }
     }
 }

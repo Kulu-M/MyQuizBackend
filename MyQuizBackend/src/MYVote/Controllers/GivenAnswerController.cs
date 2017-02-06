@@ -92,7 +92,7 @@ namespace MyQuizBackend.Controllers
         }
 
         // POST api/givenanswer/:id/publish/
-        [HttpPost("/{id}/publish")]
+        [HttpPost("{id}/publish")]
         public IActionResult PublishGivenAnswerToClients(int id)
         {
             GivenAnswer existingGivenAnswer;

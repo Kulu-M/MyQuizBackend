@@ -16,3 +16,140 @@ InvalidCastException
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
    at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\marhei\Documents\Visual_Studio_2015\Projects\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 21:25:04
+Error getting value from 'Length' on 'Microsoft.AspNetCore.Server.Kestrel.Internal.Http.FrameRequestStream'.
+JsonSerializationException
+   at Newtonsoft.Json.Serialization.ExpressionValueProvider.GetValue(Object target)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalWriter.CalculatePropertyValues(JsonWriter writer, Object value, JsonContainerContract contract, JsonProperty member, JsonProperty property, JsonContract& memberContract, Object& memberValue)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalWriter.SerializeObject(JsonWriter writer, Object value, JsonObjectContract contract, JsonProperty member, JsonContainerContract collectionContract, JsonProperty containerProperty)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalWriter.Serialize(JsonWriter jsonWriter, Object value, Type objectType)
+   at Newtonsoft.Json.JsonSerializer.SerializeInternal(JsonWriter jsonWriter, Object value, Type objectType)
+   at Newtonsoft.Json.JsonConvert.SerializeObjectInternal(Object value, Type type, JsonSerializer jsonSerializer)
+   at NuGet.Protocol.Core.v3.JsonExtensions.ToJson(Object obj, Formatting formatting)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 22
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+System.NotSupportedException: Specified method is not supported.
+   at Microsoft.AspNetCore.Server.Kestrel.Internal.Http.FrameRequestStream.get_Length()
+   at lambda_method(Closure , Object )
+   at Newtonsoft.Json.Serialization.ExpressionValueProvider.GetValue(Object target)
+-----NEW ENTRY-----
+06.02.2017 22:30:36
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 39
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 22:31:33
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 39
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 22:36:26
+Cannot access a disposed object.
+Object name: 'Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket'.
+ObjectDisposedException
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.ThrowIfDisposed()
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.<SendAsync>d__33.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.SocketHandler.<SendGivenAnswer>d__10.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\SocketHandler.cs:line 62
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 22:36:34
+Cannot access a disposed object.
+Object name: 'Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket'.
+ObjectDisposedException
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.ThrowIfDisposed()
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.<SendAsync>d__33.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.SocketHandler.<SendGivenAnswer>d__10.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\SocketHandler.cs:line 62
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 22:38:31
+Cannot access a disposed object.
+Object name: 'Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket'.
+ObjectDisposedException
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.ThrowIfDisposed()
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.<SendAsync>d__33.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.SocketHandler.<SendGivenAnswer>d__10.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\SocketHandler.cs:line 62
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+06.02.2017 22:38:32
+Cannot access a disposed object.
+Object name: 'Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket'.
+ObjectDisposedException
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.ThrowIfDisposed()
+   at Microsoft.AspNetCore.WebSockets.Protocol.CommonWebSocket.<SendAsync>d__33.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.SocketHandler.<SendGivenAnswer>d__10.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\SocketHandler.cs:line 62
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
