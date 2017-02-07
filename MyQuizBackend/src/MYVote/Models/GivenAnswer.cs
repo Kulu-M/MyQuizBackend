@@ -22,5 +22,7 @@ namespace MYVote.Models
         [Column("AnswerOptionID")]
         public long AnswerOptionId { get; set; }
         public string TimeStamp { get; set; }
+        [Column("SurveyID")]
+        public long? SurveyId { get; set; }
     }
 }
