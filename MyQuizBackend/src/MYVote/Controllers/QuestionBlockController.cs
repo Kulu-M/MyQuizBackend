@@ -75,16 +75,16 @@ namespace MyQuizBackend.Controllers
             }
             //QuestionBlock is new
             if (existingQuestionBlock == null)
-                {
-                    saveNewQuestionBlockToDatabase(questionBlock);
-                }
+            {
+                saveNewQuestionBlockToDatabase(questionBlock);
+            }
 
-                //QuestionBlock already exists in Database
-                else
-                {
-                    removeQuestionBlockFromDatabase(existingQuestionBlock);
-                    saveNewQuestionBlockToDatabase(questionBlock);
-                }
+            //QuestionBlock already exists in Database
+            else
+            {
+                removeQuestionBlockFromDatabase(existingQuestionBlock);
+                saveNewQuestionBlockToDatabase(questionBlock);
+            }
             return Ok(JsonConvert.SerializeObject(questionBlock));
         }
         
@@ -157,7 +157,7 @@ namespace MyQuizBackend.Controllers
                     where q.QuestionBlockId == questionBlockInDb.Id
                     select q;
 
-                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id));
+                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2.QuestionId == q.Id));
 
                 foreach (var question in questionList)
                 {
@@ -176,12 +176,10 @@ namespace MyQuizBackend.Controllers
                 }
 
                 //Delete from Question
-                db.Question.RemoveRange(db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id)));
+                db.Question.RemoveRange(questionList);
 
                 //Delete from QuestionQuestionBlock
-                db.QuestionQuestionBlock.RemoveRange(from q in db.QuestionQuestionBlock
-                    where q.QuestionBlockId == questionBlockInDb.Id
-                    select q);
+                db.QuestionQuestionBlock.RemoveRange(questionsFinder);
 
                 //Delete the QuestionBlock
                 db.QuestionBlock.Remove(questionBlockInDb);
