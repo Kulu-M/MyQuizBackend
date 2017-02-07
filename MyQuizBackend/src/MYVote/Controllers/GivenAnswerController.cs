@@ -19,7 +19,7 @@ namespace MyQuizBackend.Controllers
 
         // GET api/givenAnswer
         [HttpGet]
-        public IActionResult GetAllGivenAnswers()
+        public IActionResult GetAllGivenAnswers([FromQuery] int groupId, [FromQuery] int singleTopicId)
         {
             var givenAnswers = new List<GivenAnswer>();
             using (var db = new EF_DB_Context())
@@ -28,6 +28,15 @@ namespace MyQuizBackend.Controllers
             }
             if (!givenAnswers.Any()) return BadRequest("No data present!");
 
+            if (groupId != 0)
+            {
+                givenAnswers = givenAnswers.Where(x => x.GroupId != groupId).ToList() ;
+            }
+
+            if (singleTopicId != 0)
+            {
+                givenAnswers = givenAnswers.Where(x => x.SingleTopicId != singleTopicId).ToList();
+            }
             foreach (var ga in givenAnswers)
             {
                 ga.fillValues();
@@ -52,7 +61,7 @@ namespace MyQuizBackend.Controllers
         #endregion GET
 
         #region POST
-        
+
         // POST api/givenanswer
         [HttpPost]
         public IActionResult CreateOrUpdateGivenAnswer([FromBody] JObject value)
