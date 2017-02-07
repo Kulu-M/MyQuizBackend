@@ -150,8 +150,6 @@ namespace MyQuizBackend.Controllers
         {
             using (var db = new EF_DB_Context())
             {
-                IQueryable<QuestionAnswerOption> questionAnswerOptionsToDelete;
-
                 var questionsFinder =
                     from q in db.QuestionQuestionBlock
                     where q.QuestionBlockId == questionBlockInDb.Id
@@ -161,18 +159,16 @@ namespace MyQuizBackend.Controllers
 
                 foreach (var question in questionList)
                 {
-                    questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
+                    var questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
                         where a.QuestionId == question.Id
                         select a);
 
                     //Delete from AnswerOption
                     db.AnswerOption.RemoveRange(
-                        db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.Id == a.Id)));
+                        db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.AnswerOptionId == a.Id)));
 
                     //Delete from QuestionAnswerOption
-                    db.QuestionAnswerOption.RemoveRange(from a in db.QuestionAnswerOption
-                        where a.QuestionId == question.Id
-                        select a);
+                    db.QuestionAnswerOption.RemoveRange(questionAnswerOptionsToDelete);
                 }
 
                 //Delete from Question
