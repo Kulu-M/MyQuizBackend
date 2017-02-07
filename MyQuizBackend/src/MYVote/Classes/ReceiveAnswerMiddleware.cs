@@ -17,7 +17,7 @@ namespace MyQuizBackend.Classes {
         }
 
         public async Task Invoke(HttpContext context) {
-            if (context.Request.Path == new PathString("/api/givenanswer/") && context.Request.Method == "POST") {
+            if (context.Request.Path == new PathString("/api/givenanswer") && context.Request.Method == "POST") {
                 var bodyStr = "";
                 var req = context.Request;
                 req.EnableRewind();
