@@ -58,6 +58,24 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
+        // GET api/givenAnswer/latest
+        [HttpGet("latest")]
+        public IActionResult GetLatestQuestionForDevice()
+        {
+            var deviceID = DeviceAuthentification.getClientIDfromHeader(Request);
+            if (deviceID < 0) return BadRequest();
+
+            List<GivenAnswer> givenAnswerListForClient;
+
+            using (var db = new EF_DB_Context())
+            {
+                var DeviceGroupList = from temp in db.DeviceGroup where temp.DeviceId == deviceID select temp;
+                var GroupList = db.Group.Where(temp => DeviceGroupList.Any(temp2 => temp2.GroupId == temp.Id));
+                givenAnswerListForClient = db.GivenAnswer.Where(temp => GroupList.Any(temp2 => temp2.Id == temp.GroupId)).ToList();
+            }
+            return Ok(JsonConvert.SerializeObject(givenAnswerListForClient));
+        }
+
         #endregion GET
 
         #region POST
