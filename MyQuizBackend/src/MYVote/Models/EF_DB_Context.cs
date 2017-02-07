@@ -9,7 +9,7 @@ namespace MYVote.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVoteDB_Final.db");
+            var path = Path.Combine(Startup._iHostingEnv.ContentRootPath, @"Database\MYVote_DB.db");
 
             optionsBuilder.UseSqlite(@"Datasource=" + path);
         }
