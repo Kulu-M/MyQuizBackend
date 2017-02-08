@@ -133,25 +133,37 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // POST api/givenAnswer/:id/publish/
-        [HttpPost("{id}/publish")]
-        public IActionResult PublishGivenAnswerToClients(int id)
+        // POST api/start/{surveyTimeInSeconds}
+        [HttpPost("start/{seconds}")]
+        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JObject value)
         {
-            GivenAnswer existingGivenAnswer;
-            using (var db = new EF_DB_Context())
+            if (seconds < 0) return BadRequest("No negative times possible!");
+
+            List<GivenAnswer> newGivenAnswers;
+            if (value == null) return BadRequest();
+            try
             {
-                existingGivenAnswer = db.GivenAnswer.FirstOrDefault(qb => qb.Id == id);
+                newGivenAnswers = JsonConvert.DeserializeObject<List<GivenAnswer>>(value.ToString());
             }
-            if (existingGivenAnswer == null) return BadRequest("No data present!");
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+            // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
+            var rnd = new Random();
+            var surveyId = rnd.Next(1,int.MaxValue);
+            // maybe check if surveyId exists in DB and create a new one if it does
 
-            //Just for debug purposes
-            //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
+            foreach(var ga in newGivenAnswers) {
+                ga.TimeStamp = (Time.ConvertToUnixTimestamp(DateTime.Now) + seconds).ToString(); // Timestamp to know when survey ends
+                ga.SurveyId = surveyId;
+            }
 
-            //publish to clients via push notification
+            //publish these givenanswers to clients via push notification
 
-            return Ok();
-
-            //At this point the supervisor app should start a websocket connection to this backend
+            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this id
+            // ws://localhost:5000/ws/{surveyId}
+            return Ok(JsonConvert.SerializeObject(newGivenAnswers));
         }
 
         #endregion POST
@@ -181,7 +193,6 @@ namespace MyQuizBackend.Controllers
         {
             using (var db = new EF_DB_Context())
             {
-                givenAnswer.TimeStamp = Time.ConvertToUnixTimestamp(DateTime.Now).ToString();
                 givenAnswer.fillIds();
                 db.GivenAnswer.Add(givenAnswer);
                 db.SaveChanges();
