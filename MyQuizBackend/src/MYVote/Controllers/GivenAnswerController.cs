@@ -114,8 +114,11 @@ namespace MyQuizBackend.Controllers
                         // Get socketHandler for specific surveyId
                         var surveyId = (int)givenAnswer.SurveyId;
                         var socketHandler = _voteConnector.GetSocketHandlers()[surveyId];
+                        // TODO: remove, this is for debug because is dont send full objects
+                        givenAnswer.fillIds();
+                        givenAnswer.fillValues();
                         // Send the new givenAnswer to WebSocketClient (Supervisor Application)
-                        await socketHandler.SendGivenAnswer(value.ToString());
+                        await socketHandler.SendGivenAnswer(JsonConvert.SerializeObject(givenAnswer));
                     } catch (Exception) {
                         return BadRequest("There is no survey with this ID currently");
                     }
@@ -132,7 +135,7 @@ namespace MyQuizBackend.Controllers
 
         // POST api/start/{surveyTimeInSeconds}
         [HttpPost("start/{seconds}")]
-        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JObject value)
+        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JArray value)
         {
             if (seconds < 0) return BadRequest("No negative times possible!");
 
