@@ -19,7 +19,6 @@ namespace MyQuizBackend.Classes
         private readonly WebSocket socket;
         private bool _finished;
         private int _surveyId;
-
         public Queue<string> MessageQueue {get;set;}
 
         private SocketHandler(WebSocket socket, HttpContext context) {
@@ -29,6 +28,8 @@ namespace MyQuizBackend.Classes
             path = path.Replace("/", "");
             int.TryParse(path, out _surveyId);
             _voteConnector = context.RequestServices.GetService<IVoteConnector>();
+            if(_voteConnector.GetSocketHandlers().ContainsKey(_surveyId))
+                _voteConnector.RemoveSocketHandler(_surveyId);     
             _voteConnector.AddSocketHandler(_surveyId, this);
             // get timestamp for survey and set time to die respectively
             using (var db = new EF_DB_Context() ){
@@ -51,24 +52,23 @@ namespace MyQuizBackend.Classes
 
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
-                if(MessageQueue.Count > 0) {
+                while(MessageQueue.Count > 0) {
                     var toSend = MessageQueue.Dequeue();
-                    if(toSend.EndsWith(":")) {
-                        var x = toSend;
-                    }
                     await SendGivenAnswer(toSend);
                 }
                 if(_finished) 
-                    await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);           
+                    break;       
             }
             // Remove SocketHandler from VoteConnector after closing
-            _voteConnector.RemoveSocketHandler(_surveyId);   
+            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);    
+            _voteConnector.RemoveSocketHandler(_surveyId);               
         }
 
         public async Task SendGivenAnswer(string json) {
             var buffer = _encoder.GetBytes(json);
+            var segment = new ArraySegment<byte>(buffer);
             
-            await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+            await socket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         public static void Map(IApplicationBuilder app) {

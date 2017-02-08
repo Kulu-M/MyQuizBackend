@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyQuizBackend.Classes;
 using MYVote.Models;
 using Newtonsoft.Json;
@@ -152,20 +153,19 @@ namespace MyQuizBackend.Controllers
             // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
             // TODO: maybe check if surveyId exists in DB and create a new one if it does
             var rnd = new Random();
-            var surveyId = 
-            #if DEBUG
-            1; // id =1 and delete all from db so i can use the same id all the time while debugging
-            using (var db = new EF_DB_Context())
-            {
-                var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
-                foreach(var g in gas) {                    
-                    db.GivenAnswer.Remove(g);
-                }
-                db.SaveChanges();
-            }
-            #else
-            rnd.Next(1,int.MaxValue);
-            #endif
+            // id =1 and delete all from db so i can use the same id all the time while debugging
+            var surveyId = rnd.Next(1,int.MaxValue);
+
+            // using (var db = new EF_DB_Context())
+            // {
+            //     var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
+            //     foreach(var g in gas) {        
+            //         db.GivenAnswer.Remove(g);            
+            //         db.Entry(g).State = EntityState.Deleted;
+            //     }
+            //     db.SaveChanges();
+            // }
+
             foreach(var ga in newGivenAnswers) {
                 // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
