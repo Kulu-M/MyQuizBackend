@@ -220,6 +220,7 @@ namespace MyQuizBackend.Controllers
                         SingleTopicId = topic.Id
                     };
                     db.GroupSingleTopic.Add(groupSingleTopic);
+                    db.SaveChanges();
                 }
             }
         }

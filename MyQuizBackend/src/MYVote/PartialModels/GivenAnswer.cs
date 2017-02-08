@@ -24,8 +24,7 @@ namespace MYVote.Models
                 AnswerOption = db.AnswerOption.FirstOrDefault(ao => ao.Id == AnswerOptionId);
                 Question = db.Question.FirstOrDefault(q => q.Id == QuestionId);
                 QuestionBlock = db.QuestionBlock.FirstOrDefault(qb => qb.Id == QuestionBlockId);
-
-                QuestionBlock.fillWithValues();
+                QuestionBlock?.fillWithValues();
             }
         }
 

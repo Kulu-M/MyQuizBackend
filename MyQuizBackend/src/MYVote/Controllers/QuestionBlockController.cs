@@ -75,16 +75,16 @@ namespace MyQuizBackend.Controllers
             }
             //QuestionBlock is new
             if (existingQuestionBlock == null)
-                {
-                    saveNewQuestionBlockToDatabase(questionBlock);
-                }
+            {
+                saveNewQuestionBlockToDatabase(questionBlock);
+            }
 
-                //QuestionBlock already exists in Database
-                else
-                {
-                    removeQuestionBlockFromDatabase(existingQuestionBlock);
-                    saveNewQuestionBlockToDatabase(questionBlock);
-                }
+            //QuestionBlock already exists in Database
+            else
+            {
+                removeQuestionBlockFromDatabase(existingQuestionBlock);
+                saveNewQuestionBlockToDatabase(questionBlock);
+            }
             return Ok(JsonConvert.SerializeObject(questionBlock));
         }
         
@@ -150,38 +150,32 @@ namespace MyQuizBackend.Controllers
         {
             using (var db = new EF_DB_Context())
             {
-                IQueryable<QuestionAnswerOption> questionAnswerOptionsToDelete;
-
                 var questionsFinder =
                     from q in db.QuestionQuestionBlock
                     where q.QuestionBlockId == questionBlockInDb.Id
                     select q;
 
-                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id));
+                var questionList = db.Question.Where(q => questionsFinder.Any(q2 => q2.QuestionId == q.Id));
 
                 foreach (var question in questionList)
                 {
-                    questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
+                    var questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
                         where a.QuestionId == question.Id
                         select a);
 
                     //Delete from AnswerOption
                     db.AnswerOption.RemoveRange(
-                        db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.Id == a.Id)));
+                        db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.AnswerOptionId == a.Id)));
 
                     //Delete from QuestionAnswerOption
-                    db.QuestionAnswerOption.RemoveRange(from a in db.QuestionAnswerOption
-                        where a.QuestionId == question.Id
-                        select a);
+                    db.QuestionAnswerOption.RemoveRange(questionAnswerOptionsToDelete);
                 }
 
                 //Delete from Question
-                db.Question.RemoveRange(db.Question.Where(q => questionsFinder.Any(q2 => q2.Id == q.Id)));
+                db.Question.RemoveRange(questionList);
 
                 //Delete from QuestionQuestionBlock
-                db.QuestionQuestionBlock.RemoveRange(from q in db.QuestionQuestionBlock
-                    where q.QuestionBlockId == questionBlockInDb.Id
-                    select q);
+                db.QuestionQuestionBlock.RemoveRange(questionsFinder);
 
                 //Delete the QuestionBlock
                 db.QuestionBlock.Remove(questionBlockInDb);
