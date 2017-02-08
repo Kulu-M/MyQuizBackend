@@ -118,7 +118,7 @@ namespace MyQuizBackend.Controllers
                         givenAnswer.fillIds();
                         givenAnswer.fillValues();
                         // Send the new givenAnswer to WebSocketClient (Supervisor Application)
-                        await socketHandler.SendGivenAnswer(JsonConvert.SerializeObject(givenAnswer));
+                        socketHandler.MessageQueue.Enqueue(JsonConvert.SerializeObject(givenAnswer));
                     } catch (Exception) {
                         return BadRequest("There is no survey with this ID currently");
                     }
@@ -150,13 +150,26 @@ namespace MyQuizBackend.Controllers
                 return BadRequest("Could not deserialize!");
             }
             // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
-            var rnd = new Random();
-            var surveyId = rnd.Next(1,int.MaxValue);
             // TODO: maybe check if surveyId exists in DB and create a new one if it does
-
+            var rnd = new Random();
+            var surveyId = 
+            #if DEBUG
+            1; // id =1 and delete all from db so i can use the same id all the time while debugging
+            using (var db = new EF_DB_Context())
+            {
+                var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
+                foreach(var g in gas) {                    
+                    db.GivenAnswer.Remove(g);
+                }
+                db.SaveChanges();
+            }
+            #else
+            rnd.Next(1,int.MaxValue);
+            #endif
             foreach(var ga in newGivenAnswers) {
                 // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
+                saveGivenAnswerToDatabase(ga);
             }
 
             //publish these givenanswers to clients via push notification
