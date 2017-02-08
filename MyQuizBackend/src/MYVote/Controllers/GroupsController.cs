@@ -32,6 +32,10 @@ namespace MyQuizBackend.Controllers
                         select gst;
 
                     g.SingleTopics = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+
+                    var deviceIds = (from gd in db.DeviceGroup where gd.GroupId == g.Id select gd.DeviceId);                
+                    var devices = db.Device.Where(device => deviceIds.Any(did => did == device.Id));
+                    g.DeviceCount = devices.Count();
                 }
                 return Ok(JsonConvert.SerializeObject(groups));
             }
@@ -52,6 +56,10 @@ namespace MyQuizBackend.Controllers
                                         select gst;
 
                 g.SingleTopics = db.SingleTopic.Where(st => groupSingleTopics.Any(st2 => st2.SingleTopicId == st.Id)).ToList();
+
+                var deviceIds = (from gd in db.DeviceGroup where gd.GroupId == id select gd.DeviceId);                
+                var devices = db.Device.Where(device => deviceIds.Any(did => did == device.Id));
+                g.DeviceCount = devices.Count();
 
                 return Ok(JsonConvert.SerializeObject(g));
             }

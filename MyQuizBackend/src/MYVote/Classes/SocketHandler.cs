@@ -1,68 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net.WebSockets;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using MYVote.Models;
+using System.Collections.Generic;
 
 namespace MyQuizBackend.Classes
 {
-    public static class GlobalSocketContainer
-    {
-        public static SocketHandler GlobalSocketHandler;
-    }
+    public class SocketHandler {
+        public const int BufferSize = 16384;
+        private readonly UTF8Encoding _encoder = new UTF8Encoding();
+        private readonly IVoteConnector _voteConnector;
+        private readonly WebSocket socket;
+        private bool _finished;
+        private int _surveyId;
+        public Queue<string> MessageQueue {get;set;}
 
-    public class SocketHandler
-    {
-        public const int BufferSize = 4096;
-        
-        WebSocket socket;
-
-        public static string outgoingString;
-
-        SocketHandler(WebSocket socket)
-        {
+        private SocketHandler(WebSocket socket, HttpContext context) {
             this.socket = socket;
-            GlobalSocketContainer.GlobalSocketHandler = this;
+            MessageQueue = new Queue<string>();
+            var path = context.Request.Path.ToString();
+            path = path.Replace("/", "");
+            int.TryParse(path, out _surveyId);
+            _voteConnector = context.RequestServices.GetService<IVoteConnector>();
+            if(_voteConnector.GetSocketHandlers().ContainsKey(_surveyId))
+                _voteConnector.RemoveSocketHandler(_surveyId);     
+            _voteConnector.AddSocketHandler(_surveyId, this);
+            // get timestamp for survey and set time to die respectively
+            using (var db = new EF_DB_Context() ){
+                var timestamp = (from g in db.GivenAnswer where g.SurveyId == _surveyId select g.TimeStamp).First();
+                var end = int.Parse(timestamp);
+                var now = Time.ConvertToUnixTimestamp(DateTime.Now);
+                var timeToDieInMilliseconds = (int)(end - now)*1000;
+                new Timer( _ => { 
+                    _finished = true; 
+                    }, null, timeToDieInMilliseconds, Timeout.Infinite);                
+            }            
         }
 
-        static async Task Acceptor(HttpContext hc, Func<Task> n)
-        {
-            //Every Incoming Websocket Request lands here
+        private static async Task Acceptor(HttpContext hc, Func<Task> n) {
             if (!hc.WebSockets.IsWebSocketRequest) return;
             var socket = await hc.WebSockets.AcceptWebSocketAsync();
-            new SocketHandler(socket);
-            await GlobalSocketContainer.GlobalSocketHandler.EchoLoop();
+            var h = new SocketHandler(socket, hc);
+            await h.EchoLoop();
         }
 
-        public async Task EchoLoop()
-        {
-            var buffer = new byte[BufferSize];
-
-            //Code not safe
-            while (this.socket.State == WebSocketState.Open)
-            {
-                //if (!string.IsNullOrWhiteSpace(outgoingString))
-                //{
-                //    var outgoing = new ArraySegment<byte>(buffer, 0, outgoingString.Length);
-                //    await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
-                //    outgoingString = "";
-                //}
+        private async Task EchoLoop() {
+            while (socket.State == WebSocketState.Open) {
+                while(MessageQueue.Count > 0) {
+                    var toSend = MessageQueue.Dequeue();
+                    await SendGivenAnswer(toSend);
+                }
+                if(_finished) 
+                    break;       
             }
+            // Remove SocketHandler from VoteConnector after closing
+            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);    
+            _voteConnector.RemoveSocketHandler(_surveyId);               
         }
 
-        public static void Map(IApplicationBuilder app)
-        {
+        public async Task SendGivenAnswer(string json) {
+            var buffer = _encoder.GetBytes(json);
+            var segment = new ArraySegment<byte>(buffer);
+            
+            await socket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public static void Map(IApplicationBuilder app) {
             app.UseWebSockets();
-            app.Use(SocketHandler.Acceptor);
-        }
-
-        public async void SendViaSocket(string toSend)
-        {
-            outgoingString = toSend;
-            await GlobalSocketContainer.GlobalSocketHandler.EchoLoop();
+            app.Use(Acceptor);
         }
     }
 }

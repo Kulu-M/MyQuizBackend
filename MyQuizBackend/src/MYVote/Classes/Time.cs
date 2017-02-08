@@ -7,9 +7,9 @@ namespace MyQuizBackend.Classes
 {
     public class Time
     {
-        public DateTime UnixTime = new DateTime(1970, 1,1,0,0,0, DateTimeKind.Utc);
+        public static DateTime UnixTime = new DateTime(1970, 1,1,0,0,0, DateTimeKind.Utc);
 
-        public double getUnixTimeDifferenceToNow()
+        public static double getUnixTimeDifferenceToNow()
         {
             return  DateTime.Now.Subtract(UnixTime).TotalSeconds;
         }

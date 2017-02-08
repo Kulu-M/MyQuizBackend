@@ -8,5 +8,6 @@ namespace MYVote.Models
     public partial class Group
     {
         public List<SingleTopic> SingleTopics = new List<SingleTopic>();
+        public int DeviceCount;
     }
 }

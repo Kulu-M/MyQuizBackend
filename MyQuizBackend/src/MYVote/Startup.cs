@@ -32,6 +32,7 @@ namespace MYVote
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddSingleton<IVoteConnector, VoteConnector>();
             services.AddMvc();
         }
 

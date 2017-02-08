@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyQuizBackend.Classes;
 using MYVote.Models;
 using Newtonsoft.Json;
@@ -15,6 +16,10 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class GivenAnswerController : Controller
     {
+        private readonly IVoteConnector _voteConnector;
+        public GivenAnswerController(IVoteConnector connector) {
+            _voteConnector = connector;
+        }
         #region GET
 
         // GET api/givenAnswer
@@ -82,10 +87,10 @@ namespace MyQuizBackend.Controllers
 
         // POST api/givenanswer
         [HttpPost]
-        public IActionResult CreateOrUpdateGivenAnswer([FromBody] JObject value)
+        public async Task<IActionResult> CreateOrUpdateGivenAnswer([FromBody] JObject value)
         {
             GivenAnswer givenAnswer;
-            GivenAnswer existingGivenAnswer;
+            GivenAnswer existingGivenAnswer;    
             if (value == null) return BadRequest();
             try
             {
@@ -103,46 +108,75 @@ namespace MyQuizBackend.Controllers
             //givenAnswer is new
             if (existingGivenAnswer == null)
             {
-                saveGivenAnswerToDatabase(givenAnswer);
-            }
-
-            //givenAnswer already exists in Database
-            else
-            {
-                removeGivenAnswerFromDatabase(existingGivenAnswer);
-                saveGivenAnswerToDatabase(givenAnswer);
-                givenAnswer.fillValues();
                 if (givenAnswer.Device != null && givenAnswer.AnswerOption != null)
                 {
                     //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor via socket
-
-                    //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
-
-                    //await SocketHandler.h.EchoLoop();
+                    try {
+                        // Get socketHandler for specific surveyId
+                        var surveyId = (int)givenAnswer.SurveyId;
+                        var socketHandler = _voteConnector.GetSocketHandlers()[surveyId];
+                        // TODO: remove, this is for debug because is dont send full objects
+                        givenAnswer.fillIds();
+                        givenAnswer.fillValues();
+                        // Send the new givenAnswer to WebSocketClient (Supervisor Application)
+                        socketHandler.MessageQueue.Enqueue(JsonConvert.SerializeObject(givenAnswer));
+                    } catch (Exception) {
+                        return BadRequest("There is no survey with this ID currently");
+                    }
                 }
+                saveGivenAnswerToDatabase(givenAnswer);
+            } else
+            {                
+                //givenAnswer already exists in Database
+                // this  should not be possible since the givenanswer id is generated when saving a new one to DB
+                return BadRequest("This GivenAnswer already exists!");
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // POST api/givenAnswer/:id/publish/
-        [HttpPost("{id}/publish")]
-        public IActionResult PublishGivenAnswerToClients(int id)
+        // POST api/start/{surveyTimeInSeconds}
+        [HttpPost("start/{seconds}")]
+        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JArray value)
         {
-            GivenAnswer existingGivenAnswer;
-            using (var db = new EF_DB_Context())
+            if (seconds < 0) return BadRequest("No negative times possible!");
+
+            List<GivenAnswer> newGivenAnswers;
+            if (value == null) return BadRequest("Empty body");
+            try
             {
-                existingGivenAnswer = db.GivenAnswer.FirstOrDefault(qb => qb.Id == id);
+                newGivenAnswers = JsonConvert.DeserializeObject<List<GivenAnswer>>(value.ToString());
             }
-            if (existingGivenAnswer == null) return BadRequest("No data present!");
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+            // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
+            // TODO: maybe check if surveyId exists in DB and create a new one if it does
+            var rnd = new Random();
+            // id =1 and delete all from db so i can use the same id all the time while debugging
+            var surveyId = rnd.Next(1,int.MaxValue);
 
-            //Just for debug purposes
-            //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
+            // using (var db = new EF_DB_Context())
+            // {
+            //     var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
+            //     foreach(var g in gas) {        
+            //         db.GivenAnswer.Remove(g);            
+            //         db.Entry(g).State = EntityState.Deleted;
+            //     }
+            //     db.SaveChanges();
+            // }
 
-            //publish to clients via push notification
+            foreach(var ga in newGivenAnswers) {
+                // Add surveyId to each GivenAnswer
+                ga.SurveyId = surveyId;
+                saveGivenAnswerToDatabase(ga);
+            }
 
-            return Ok();
+            //publish these givenanswers to clients via push notification
 
-            //At this point the supervisor app should start a websocket connection to this backend
+            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this surveyId
+            // ws://localhost:5000/ws/{surveyId}
+            return Ok(JsonConvert.SerializeObject(newGivenAnswers));
         }
 
         #endregion POST
