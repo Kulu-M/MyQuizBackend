@@ -117,7 +117,6 @@ namespace MyQuizBackend.Controllers
             {
                 db.QuestionBlock.Add(questionBlock);
                 db.SaveChanges();
-
                 foreach (var question in questionBlock.Questions)
                 {
                     db.Question.Add(question);

@@ -23,11 +23,7 @@ namespace MYVote.Models
 
                 foreach (var question in questionList)
                 {
-                    var answerOptionsFinder = from a in db.QuestionAnswerOption
-                                              where a.QuestionId == question.Id
-                                              select a.AnswerOptionId;
-
-                    question.AnswerOptions = db.AnswerOption.Where(a => answerOptionsFinder.Any(a2 => a2 == a.Id)).ToList();
+                    question.fillValues();
                 }
                 Questions = questionList.ToList();
             }
