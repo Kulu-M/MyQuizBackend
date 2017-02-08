@@ -250,3 +250,5 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+MyQuizBackend/src/MYVote/.vscode/launch.json
+MyQuizBackend/src/MYVote/.vscode/tasks.json

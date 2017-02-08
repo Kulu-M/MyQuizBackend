@@ -153,3 +153,269 @@ ObjectDisposedException
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
    at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in C:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:52:58
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:53:01
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:53:03
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:53:05
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:53:07
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:53:09
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:25
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:27
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:29
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:31
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:34
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:36
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:38
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:40
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:42
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:54:44
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:59:39
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:59:41
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 05:59:43
+Sequence contains no elements
+InvalidOperationException
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 29
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 06:23:02
+Invalid URI: The format of the URI could not be determined.
+UriFormatException
+   at System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   at System.Uri..ctor(String uriString)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 30
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 06:23:12
+Invalid URI: The format of the URI could not be determined.
+UriFormatException
+   at System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   at System.Uri..ctor(String uriString)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 30
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21
+
+-----NEW ENTRY-----
+08.02.2017 06:24:45
+The given key was not present in the dictionary.
+KeyNotFoundException
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at MyQuizBackend.Classes.ReceiveAnswerMiddleware.<Invoke>d__3.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ReceiveAnswerMiddleware.cs:line 33
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at ErrorHandlingMiddleware.<Invoke>d__2.MoveNext() in c:\Users\itmue\Documents\Repositories\MyQuizBackend\MyQuizBackend\src\MYVote\Classes\ExceptionHandler.cs:line 21

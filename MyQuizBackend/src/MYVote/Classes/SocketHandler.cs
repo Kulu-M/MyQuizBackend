@@ -16,12 +16,16 @@ namespace MyQuizBackend.Classes {
         private readonly WebSocket socket;
         private bool _finished;
         private int _remainingTime;
-        private Timer _timer;
 
+        private int _surveyId;
         private SocketHandler(WebSocket socket, HttpContext context) {
             this.socket = socket;
+            var path = context.Request.Path.ToString();
+            var test = context.Request.Path.ToUriComponent();
+            path = path.Replace("/", "");
+            int.TryParse(path, out _surveyId);
             _voteConnector = context.RequestServices.GetService<IVoteConnector>();
-            _voteConnector.AddSocketHandler(this);
+            _voteConnector.AddSocketHandler(_surveyId, this);
             _remainingTime = 30;
         }
 
@@ -37,10 +41,10 @@ namespace MyQuizBackend.Classes {
 
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
-                await SendGivenAnswer(_remainingTime.ToString());
+                //await SendGivenAnswer(_remainingTime.ToString());
                 if (_finished) {
                     await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                    _voteConnector.RemoveSocketHandler(this);
+                    _voteConnector.RemoveSocketHandler(_surveyId);
                 }
                 await Task.Delay(1000);
                 _remainingTime -= 1;

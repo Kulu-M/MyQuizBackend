@@ -15,6 +15,10 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class GivenAnswerController : Controller
     {
+        private readonly IVoteConnector _voteConnector;
+        public GivenAnswerController(IVoteConnector connector) {
+            _voteConnector = connector;
+        }
         #region GET
 
         // GET api/givenAnswer
@@ -82,10 +86,10 @@ namespace MyQuizBackend.Controllers
 
         // POST api/givenanswer
         [HttpPost]
-        public IActionResult CreateOrUpdateGivenAnswer([FromBody] JObject value)
+        public async Task<IActionResult> CreateOrUpdateGivenAnswer([FromBody] JObject value)
         {
             GivenAnswer givenAnswer;
-            GivenAnswer existingGivenAnswer;
+            GivenAnswer existingGivenAnswer;    
             if (value == null) return BadRequest();
             try
             {
@@ -115,10 +119,15 @@ namespace MyQuizBackend.Controllers
                 if (givenAnswer.Device != null && givenAnswer.AnswerOption != null)
                 {
                     //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor via socket
-
-                    //GlobalSocketContainer.GlobalSocketHandler.SendViaSocket(JsonConvert.SerializeObject(existingGivenAnswer));
-
-                    //await SocketHandler.h.EchoLoop();
+                    try {
+                        // Get socketHandler for specific surveyId
+                        var surveyId = (int)givenAnswer.SurveyId;
+                        var socketHandler = _voteConnector.GetSocketHandlers()[surveyId];
+                        // Send the new givenAnswer to WebSocketClient (Supervisor Application)
+                        await socketHandler.SendGivenAnswer(value.ToString());
+                    } catch (Exception) {
+                        return BadRequest("There is no survey with this ID currently");
+                    }
                 }
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
@@ -172,6 +181,7 @@ namespace MyQuizBackend.Controllers
         {
             using (var db = new EF_DB_Context())
             {
+                givenAnswer.TimeStamp = Time.ConvertToUnixTimestamp(DateTime.Now).ToString();
                 givenAnswer.fillIds();
                 db.GivenAnswer.Add(givenAnswer);
                 db.SaveChanges();

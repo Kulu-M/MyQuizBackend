@@ -44,7 +44,6 @@ namespace MYVote
 
             //Comment this out to stop giving Exception information as HTTP response on requests
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            app.UseMiddleware(typeof(ReceiveAnswerMiddleware));
 
             //This is for the SocketsHandler
             app.Map("/ws", SocketHandler.Map);
