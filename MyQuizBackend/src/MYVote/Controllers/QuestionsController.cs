@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MYVote.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,20 +21,31 @@ namespace MyQuizBackend.Controllers
 
         // GET api/questions
         [HttpGet]
-        public string GetAllQuestions()
+        public IActionResult GetAllQuestions()
         {
             using (var db = new EF_DB_Context())
             {
                 var question = from q in db.Question select q;
-                return JsonConvert.SerializeObject(question);
+                if (!question.Any()) return BadRequest("No data present!");
+                foreach (var q in question)
+                {
+                    q.fillValues();
+                }
+                return Ok(JsonConvert.SerializeObject(question));
             }
         }
 
-        // GET api/questions/5
+        // GET api/questions/:id
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetSingleQuestionById(int id)
         {
-            return "value";
+            using (var db = new EF_DB_Context())
+            {
+                var q = db.Question.FirstOrDefault(qq => qq.Id == id);
+                if (q == null) return BadRequest("No data present!");
+                q.fillValues();
+                return Ok(JsonConvert.SerializeObject(q));
+            }
         }
 
         #endregion GET
@@ -42,22 +54,34 @@ namespace MyQuizBackend.Controllers
 
         // POST api/questions
         [HttpPost]
-        public void CreateOrUpdateQuestion([FromBody]string value)
+        public IActionResult CreateOrUpdateQuestion([FromBody]JObject value)
         {
-            var question = JsonConvert.DeserializeObject<Question>(value.ToString());
+            if (value == null) return BadRequest();
+            Question question;
+            try
+            {
+                question = JsonConvert.DeserializeObject<Question>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+            
             using (var db = new EF_DB_Context())
             {
                 var existingQuestion = db.Question.First(q => q.Id == question.Id);
                 if (existingQuestion == null)
                 {
-                    db.Question.Add(question);
-                    db.SaveChanges();
+                    //Question is new
+                    saveQuestionWithAnswerOptionsToDatabase(question);
+                    return Ok(JsonConvert.SerializeObject(question));
                 }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(question.Text)) return;
-                    existingQuestion.Text = question.Text;
-                    db.SaveChanges();
+                    //Question already exists => update
+                    removeQuestionWithAnswerOptionsFromDatabase(question);
+                    saveQuestionWithAnswerOptionsToDatabase(question);
+                    return Ok(JsonConvert.SerializeObject(question));
                 }
             }
         }
@@ -68,17 +92,64 @@ namespace MyQuizBackend.Controllers
         
         // DELETE api/questions/id
         [HttpDelete("{id}")]
-        public void DeleteQuestion(int id)
+        public IActionResult DeleteQuestion(int id)
         {
             using (var db = new EF_DB_Context())
             {
                 var questionToDelete = db.Question.FirstOrDefault(q => q.Id == id);
-                if (questionToDelete == null) return;
-                db.Question.Remove(questionToDelete);
-                db.SaveChanges();
+                if (questionToDelete == null) return BadRequest("No data present!");
+                removeQuestionWithAnswerOptionsFromDatabase(questionToDelete);
+                return Ok(JsonConvert.SerializeObject(questionToDelete));
             }
         }
 
         #endregion DELETE
+
+        #region LOGIC
+
+        public static void saveQuestionWithAnswerOptionsToDatabase(Question question)
+        {
+            using (var db = new EF_DB_Context())
+            {
+                db.Question.Add(question);
+                db.SaveChanges();
+
+                foreach (var answerOption in question.AnswerOptions)
+                {
+                    db.AnswerOption.Add(answerOption);
+                    db.SaveChanges();
+                    db.QuestionAnswerOption.Add(new QuestionAnswerOption
+                    {
+                        AnswerOptionId = answerOption.Id,
+                        QuestionId = question.Id
+                    });
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public static void removeQuestionWithAnswerOptionsFromDatabase(Question q)
+        {
+            using (var db = new EF_DB_Context())
+            {
+                var questionAnswerOptionsToDelete = (from a in db.QuestionAnswerOption
+                                                        where a.QuestionId == q.Id
+                                                        select a);
+
+                //Delete from AnswerOption
+                db.AnswerOption.RemoveRange(
+                    db.AnswerOption.Where(a => questionAnswerOptionsToDelete.Any(a2 => a2.AnswerOptionId == a.Id)));
+
+                //Delete from QuestionAnswerOption
+                db.QuestionAnswerOption.RemoveRange(questionAnswerOptionsToDelete);
+  
+                //Delete from Question
+                db.Question.Remove(q);
+
+                db.SaveChanges();
+            }
+        }
+
+        #endregion LOGIC
     }
 }
