@@ -58,7 +58,7 @@ namespace MyQuizBackend.Controllers
         public IActionResult PostNewQuestionBlock([FromBody] JObject value)
         {
             var questionBlock = new QuestionBlock();
-            var existingQuestionBlock = new QuestionBlock();
+            QuestionBlock existingQuestionBlock;
             if (value == null) return BadRequest();
             try
             {
