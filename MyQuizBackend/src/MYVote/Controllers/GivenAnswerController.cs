@@ -107,15 +107,6 @@ namespace MyQuizBackend.Controllers
             //givenAnswer is new
             if (existingGivenAnswer == null)
             {
-                saveGivenAnswerToDatabase(givenAnswer);
-            }
-
-            //givenAnswer already exists in Database
-            else
-            {
-                removeGivenAnswerFromDatabase(existingGivenAnswer);
-                saveGivenAnswerToDatabase(givenAnswer);
-                givenAnswer.fillValues();
                 if (givenAnswer.Device != null && givenAnswer.AnswerOption != null)
                 {
                     //Check if answeroption and client is filled - if yes it comes from client and needs to be pushed to supervisor via socket
@@ -129,6 +120,12 @@ namespace MyQuizBackend.Controllers
                         return BadRequest("There is no survey with this ID currently");
                     }
                 }
+                saveGivenAnswerToDatabase(givenAnswer);
+            } else
+            {                
+                //givenAnswer already exists in Database
+                // this  should not be possible since the givenanswer id is generated when saving a new one to DB
+                return BadRequest("This GivenAnswer already exists!");
             }
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
@@ -140,7 +137,7 @@ namespace MyQuizBackend.Controllers
             if (seconds < 0) return BadRequest("No negative times possible!");
 
             List<GivenAnswer> newGivenAnswers;
-            if (value == null) return BadRequest();
+            if (value == null) return BadRequest("Empty body");
             try
             {
                 newGivenAnswers = JsonConvert.DeserializeObject<List<GivenAnswer>>(value.ToString());
@@ -152,16 +149,18 @@ namespace MyQuizBackend.Controllers
             // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
             var rnd = new Random();
             var surveyId = rnd.Next(1,int.MaxValue);
-            // maybe check if surveyId exists in DB and create a new one if it does
+            // TODO: maybe check if surveyId exists in DB and create a new one if it does
 
             foreach(var ga in newGivenAnswers) {
-                ga.TimeStamp = (Time.ConvertToUnixTimestamp(DateTime.Now) + seconds).ToString(); // Timestamp to know when survey ends
+                // Timestamp to know when survey ends
+                ga.TimeStamp = (Time.ConvertToUnixTimestamp(DateTime.Now) + seconds).ToString();
+                // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
             }
 
             //publish these givenanswers to clients via push notification
 
-            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this id
+            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this surveyId
             // ws://localhost:5000/ws/{surveyId}
             return Ok(JsonConvert.SerializeObject(newGivenAnswers));
         }

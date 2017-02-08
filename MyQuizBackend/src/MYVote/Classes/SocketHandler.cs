@@ -39,6 +39,7 @@ namespace MyQuizBackend.Classes {
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
                 // check every half second if socket is still open
+                // connection has to be closed by supervisor
                 await Task.Delay(500);
             }
             _voteConnector.RemoveSocketHandler(_surveyId);
