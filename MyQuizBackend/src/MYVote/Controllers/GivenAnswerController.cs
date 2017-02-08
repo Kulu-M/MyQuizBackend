@@ -155,8 +155,6 @@ namespace MyQuizBackend.Controllers
             // TODO: maybe check if surveyId exists in DB and create a new one if it does
 
             foreach(var ga in newGivenAnswers) {
-                // Timestamp to know when survey ends
-                ga.TimeStamp = (Time.ConvertToUnixTimestamp(DateTime.Now) + seconds).ToString();
                 // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
             }
