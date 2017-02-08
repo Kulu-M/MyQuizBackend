@@ -56,11 +56,12 @@ namespace MyQuizBackend.Classes
                     var toSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(toSend);
                 }
-                if(_finished) 
-                    break;       
+                if(_finished) {
+                    await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);   
+                    break;   
+                }     
             }
             // Remove SocketHandler from VoteConnector after closing
-            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);    
             _voteConnector.RemoveSocketHandler(_surveyId);               
         }
 
