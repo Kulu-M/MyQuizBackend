@@ -119,7 +119,9 @@ namespace MyQuizBackend.Controllers
                         givenAnswer.fillIds();
                         givenAnswer.fillValues();
                         // Send the new givenAnswer to WebSocketClient (Supervisor Application)
-                        socketHandler.MessageQueue.Enqueue(JsonConvert.SerializeObject(givenAnswer));
+
+                        if(!socketHandler._finished)
+                            socketHandler.MessageQueue.Enqueue(JsonConvert.SerializeObject(givenAnswer));
                     } catch (Exception) {
                         return BadRequest("There is no survey with this ID currently");
                     }

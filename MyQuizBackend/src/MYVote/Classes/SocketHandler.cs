@@ -17,7 +17,7 @@ namespace MyQuizBackend.Classes
         private readonly UTF8Encoding _encoder = new UTF8Encoding();
         private readonly IVoteConnector _voteConnector;
         private readonly WebSocket socket;
-        private bool _finished;
+        public bool _finished;
         private int _surveyId;
         public Queue<string> MessageQueue {get;set;}
 
@@ -36,7 +36,7 @@ namespace MyQuizBackend.Classes
                 var timestamp = (from g in db.GivenAnswer where g.SurveyId == _surveyId select g.TimeStamp).First();
                 var end = int.Parse(timestamp);
                 var now = Time.ConvertToUnixTimestamp(DateTime.Now);
-                var timeToDieInMilliseconds = (int)(end - now)*1000;
+                var timeToDieInMilliseconds = (int)(end - now)*2000;
                 new Timer( _ => { 
                     _finished = true; 
                     }, null, timeToDieInMilliseconds, Timeout.Infinite);                
