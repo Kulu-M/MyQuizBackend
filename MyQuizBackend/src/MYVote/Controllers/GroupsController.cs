@@ -14,6 +14,8 @@ namespace MyQuizBackend.Controllers
     [Route("api/[controller]")]
     public class GroupsController : Controller
     {
+        Random rnd = new Random();
+
         #region GET
         
         // Get all Groups
@@ -178,6 +180,7 @@ namespace MyQuizBackend.Controllers
             using (var db = new EF_DB_Context())
             {
                 //Create new Group
+                group.EnterGroupPin = rnd.Next(1000,10000).ToString();
                 db.Group.Add(group);
                 db.SaveChanges();
 
