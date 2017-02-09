@@ -85,6 +85,7 @@ namespace MyQuizBackend.Controllers
 
         #region POST
 
+        // Client Answer to Supervisor
         // POST api/givenanswer
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdateGivenAnswer([FromBody] JObject value)
@@ -136,12 +137,11 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // POST api/start1/{surveyTimeInSeconds}
-        [HttpPost("start1/{seconds}")]
-        public IActionResult Publish1GivenAnswerToClients(int seconds, [FromBody] JObject value)
+        // Jovan
+        // POST api/start1
+        [HttpPost("start1")]
+        public IActionResult Publish1GivenAnswerToClients([FromBody] JObject value)
         {
-            if (seconds < 0) return BadRequest("No negative times possible!");
-
             GivenAnswer newGivenAnswer;
             if (value == null) return BadRequest("Empty body");
             try
@@ -163,12 +163,11 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(newGivenAnswer));
         }
 
-        // POST api/start/{surveyTimeInSeconds}
-        [HttpPost("start/{seconds}")]
-        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JArray value)
+        // Patrick
+        // POST api/start
+        [HttpPost("start")]
+        public IActionResult PublishGivenAnswerToClients([FromBody] JArray value)
         {
-            if (seconds < 0) return BadRequest("No negative times possible!");
-
             List<GivenAnswer> newGivenAnswers;
             if (value == null) return BadRequest("Empty body");
             try
