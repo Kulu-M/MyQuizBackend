@@ -35,12 +35,12 @@ namespace MyQuizBackend.Controllers
 
             if (groupId != 0)
             {
-                givenAnswers = givenAnswers.Where(x => x.GroupId != groupId).ToList() ;
+                givenAnswers = givenAnswers.Where(x => x.GroupId == groupId).ToList() ;
             }
 
             if (singleTopicId != 0)
             {
-                givenAnswers = givenAnswers.Where(x => x.SingleTopicId != singleTopicId).ToList();
+                givenAnswers = givenAnswers.Where(x => x.SingleTopicId == singleTopicId).ToList();
             }
             foreach (var ga in givenAnswers)
             {
