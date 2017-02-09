@@ -82,7 +82,7 @@ namespace MyQuizBackend.Controllers
             //QuestionBlock already exists in Database
             else
             {
-                removeQuestionBlockFromDatabase(existingQuestionBlock);
+                removeQuestionBlockFromDatabase(questionBlock);
                 saveNewQuestionBlockToDatabase(questionBlock);
             }
             return Ok(JsonConvert.SerializeObject(questionBlock));
