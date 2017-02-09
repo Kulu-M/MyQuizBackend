@@ -56,7 +56,7 @@ namespace MyQuizBackend.Controllers
             GivenAnswer givenAnswer;
             using (var db = new EF_DB_Context())
             {
-                givenAnswer = db.GivenAnswer.FirstOrDefault();
+                givenAnswer = db.GivenAnswer.FirstOrDefault(ga => ga.Id == id);
                 if (givenAnswer == null) return BadRequest("No data present!");
             }
             givenAnswer.fillValues();
