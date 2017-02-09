@@ -136,6 +136,33 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
+        // POST api/start1/{surveyTimeInSeconds}
+        [HttpPost("start1/{seconds}")]
+        public IActionResult Publish1GivenAnswerToClients(int seconds, [FromBody] JObject value)
+        {
+            if (seconds < 0) return BadRequest("No negative times possible!");
+
+            GivenAnswer newGivenAnswer;
+            if (value == null) return BadRequest("Empty body");
+            try
+            {
+                newGivenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
+
+            var rnd = new Random();
+
+            var surveyId = rnd.Next(1, int.MaxValue);
+
+            newGivenAnswer.SurveyId = surveyId;
+            saveGivenAnswerToDatabase(newGivenAnswer);
+
+            return Ok(JsonConvert.SerializeObject(newGivenAnswer));
+        }
+
         // POST api/start/{surveyTimeInSeconds}
         [HttpPost("start/{seconds}")]
         public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JArray value)
@@ -152,32 +179,16 @@ namespace MyQuizBackend.Controllers
             {
                 return BadRequest("Could not deserialize!");
             }
-            // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
-            // TODO: maybe check if surveyId exists in DB and create a new one if it does
+
             var rnd = new Random();
-            // id =1 and delete all from db so i can use the same id all the time while debugging
+            
             var surveyId = rnd.Next(1,int.MaxValue);
 
-            // using (var db = new EF_DB_Context())
-            // {
-            //     var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
-            //     foreach(var g in gas) {        
-            //         db.GivenAnswer.Remove(g);            
-            //         db.Entry(g).State = EntityState.Deleted;
-            //     }
-            //     db.SaveChanges();
-            // }
-
             foreach(var ga in newGivenAnswers) {
-                // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
                 saveGivenAnswerToDatabase(ga);
             }
-
-            //publish these givenanswers to clients via push notification
-
-            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this surveyId
-            // ws://localhost:5000/ws/{surveyId}
+           
             return Ok(JsonConvert.SerializeObject(newGivenAnswers));
         }
 
