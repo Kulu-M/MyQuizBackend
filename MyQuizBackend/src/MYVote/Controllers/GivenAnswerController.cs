@@ -85,7 +85,7 @@ namespace MyQuizBackend.Controllers
 
         #region POST
 
-        // Client Answer to Supervisor
+        // Client Answer input -> send to Supervisor
         // POST api/givenanswer
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdateGivenAnswer([FromBody] JObject value)
