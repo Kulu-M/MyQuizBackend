@@ -111,7 +111,7 @@ namespace MyQuizBackend.Controllers
 
         #region LOGIC
 
-        public QuestionBlock saveNewQuestionBlockToDatabase(QuestionBlock questionBlock)
+        public static QuestionBlock saveNewQuestionBlockToDatabase(QuestionBlock questionBlock)
         {
             using (var db = new EF_DB_Context())
             {

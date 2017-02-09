@@ -145,7 +145,7 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // Jovan
+        // Jovan create new GA for Client
         // POST api/start1
         [HttpPost("start1")]
         public IActionResult Publish1GivenAnswerToClients([FromBody] JObject value)
@@ -154,7 +154,7 @@ namespace MyQuizBackend.Controllers
             if (value == null) return BadRequest("Empty body");
             try
             {
-                newGivenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
+                newGivenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString(),new JsonSerializerSettings(){NullValueHandling = NullValueHandling.Ignore});
             }
             catch (Exception)
             {
@@ -171,7 +171,7 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(newGivenAnswer));
         }
 
-        // Patrick
+        // Patrick create new GA for Client
         // POST api/start
         [HttpPost("start")]
         public IActionResult PublishGivenAnswerToClients([FromBody] JArray value)
@@ -224,6 +224,11 @@ namespace MyQuizBackend.Controllers
 
         public void saveGivenAnswerToDatabase(GivenAnswer givenAnswer)
         {
+            if (givenAnswer.QuestionBlock.Id == 0)
+            {
+                givenAnswer.QuestionBlock = QuestionBlockController.saveNewQuestionBlockToDatabase(givenAnswer.QuestionBlock);
+            }
+
             using (var db = new EF_DB_Context())
             {
                 givenAnswer.fillIds();
