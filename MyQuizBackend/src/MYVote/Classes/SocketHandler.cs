@@ -52,15 +52,17 @@ namespace MyQuizBackend.Classes
 
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
+                await Task.Delay(1000);
                 while(MessageQueue.Count > 0) {
                     var toSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(toSend);
                 }
-                if(_finished) 
-                    break;       
+                if(_finished) {
+                    await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);   
+                    break;   
+                }     
             }
             // Remove SocketHandler from VoteConnector after closing
-            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);    
             _voteConnector.RemoveSocketHandler(_surveyId);               
         }
 
