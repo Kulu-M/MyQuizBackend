@@ -13,39 +13,52 @@ using System.Collections.Generic;
 namespace MyQuizBackend.Classes
 {
     public class SocketHandler {
-        public const int BufferSize = 16384;
+        public const int BufferSize = 1024;
         private readonly UTF8Encoding _encoder = new UTF8Encoding();
         private readonly IVoteConnector _voteConnector;
-        private readonly WebSocket socket;
+        private readonly Dictionary<int,WebSocket> sockets = new Dictionary<int,WebSocket> ();
         public bool _finished;
         private int _surveyId;
         public Queue<string> MessageQueue {get;set;}
 
         private SocketHandler(WebSocket socket, HttpContext context) {
-            this.socket = socket;
             MessageQueue = new Queue<string>();
             var path = context.Request.Path.ToString();
             path = path.Replace("/", "");
             int.TryParse(path, out _surveyId);
+            
+            sockets.Add(_surveyId,socket);
             _voteConnector = context.RequestServices.GetService<IVoteConnector>();
             if(_voteConnector.GetSocketHandlers().ContainsKey(_surveyId))
                 _voteConnector.RemoveSocketHandler(_surveyId);     
             _voteConnector.AddSocketHandler(_surveyId, this);
             // get timestamp for survey and set time to die respectively
+
             using (var db = new EF_DB_Context() ){
                 var timestamp = (from g in db.GivenAnswer where g.SurveyId == _surveyId && !string.IsNullOrWhiteSpace(g.TimeStamp) select g.TimeStamp).First();
                 var end = int.Parse(timestamp);
                 var now = Time.ConvertToUnixTimestamp(DateTime.Now);
-                var timeToDieInMilliseconds = (int)(end - now)*2000;
-                new Timer( async _ => { 
+                var timeToDieInMilliseconds = (int)(end - now)*1000 + 60000;
+                new Timer(_ => { 
                     _finished = true; 
                     MessageQueue.Clear();
-                    await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None); 
-                    _voteConnector.RemoveSocketHandler(_surveyId);        
+                    _voteConnector.RemoveSocketHandler(_surveyId);
                     }, null, timeToDieInMilliseconds, Timeout.Infinite);                
-            }            
+            }          
+            // WaitForClose();  
         }
 
+        // private async void WaitForClose() {
+        //     var stringBuffer = new ArraySegment<byte>(new byte[BufferSize]);       
+        //     if(socket.State == WebSocketState.Open)   {
+      
+        //     var result = await socket.ReceiveAsync(stringBuffer, CancellationToken.None);
+        //     if (result.MessageType == WebSocketMessageType.Close) {
+        //         await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+        //     }
+        //     }     
+
+        // }
         private static async Task Acceptor(HttpContext hc, Func<Task> n) {
             if (!hc.WebSockets.IsWebSocketRequest) return;
             var socket = await hc.WebSockets.AcceptWebSocketAsync();
@@ -54,11 +67,11 @@ namespace MyQuizBackend.Classes
         }
 
         private async Task EchoLoop() {
-            while (socket.State == WebSocketState.Open) {
+            while (sockets[_surveyId].State == WebSocketState.Open) {
                 if(_finished) {  
                     break;   
                 }
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 while(MessageQueue.Count > 0) {
                     var toSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(toSend);
@@ -70,8 +83,13 @@ namespace MyQuizBackend.Classes
         public async Task SendGivenAnswer(string json) {
             var buffer = _encoder.GetBytes(json);
             var segment = new ArraySegment<byte>(buffer);
-            
-            await socket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+            var stringL = json.Length;
+            var segL = segment.Count;
+            if(stringL != segL) {
+                var x=1;
+            }
+
+            await sockets[_surveyId].SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         public static void Map(IApplicationBuilder app) {
@@ -79,4 +97,6 @@ namespace MyQuizBackend.Classes
             app.Use(Acceptor);
         }
     }
+
+    
 }
