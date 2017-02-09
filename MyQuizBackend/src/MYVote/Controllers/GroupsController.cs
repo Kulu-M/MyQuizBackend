@@ -117,42 +117,6 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        //TODO Deprecated
-        // POST api/groups/{id}/topics
-        [HttpPost("{id}/topics")]
-        public IActionResult PostNewTopicToGroup(int id, [FromBody]JArray value)
-        {
-            List<SingleTopic> listSingleTopics;
-            if (value == null) return BadRequest();
-            try
-            {
-                listSingleTopics = JsonConvert.DeserializeObject<List<SingleTopic>>(value.ToString());
-            }
-            catch (Exception)
-            {
-                return BadRequest("Could not deserialize!");
-            }
-            if (listSingleTopics == null || !listSingleTopics.Any()) return BadRequest();
-            
-            foreach (var singleTopic in listSingleTopics)
-            {
-                using (var db = new EF_DB_Context())
-                {
-                    //SaveChanges needs to be called inbetween to let the Database give the new entity an ID
-                    db.SingleTopic.Add(singleTopic);
-                    db.SaveChanges();
-
-                    var groupSingle = new GroupSingleTopic();
-                    groupSingle.GroupId = id;
-                    groupSingle.SingleTopicId = singleTopic.Id;
-                    db.GroupSingleTopic.Add(groupSingle);
-
-                    db.SaveChanges();
-                }
-            }
-            return Ok();
-        }
-
         // POST api/groups/{id}/questions/{questionId}/answers
         [HttpPost("{id}/questions/{questionId}/answers")]
         public IActionResult ClientAnswerInput(int id, int questionId, [FromBody]JObject value)
