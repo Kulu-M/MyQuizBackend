@@ -180,7 +180,11 @@ namespace MyQuizBackend.Controllers
             using (var db = new EF_DB_Context())
             {
                 //Create new Group
-                group.EnterGroupPin = rnd.Next(1000,10000).ToString();
+                do
+                {
+                    group.EnterGroupPin = rnd.Next(1000, 10000).ToString();
+                } while (db.Group.Any(gr => gr.EnterGroupPin == group.EnterGroupPin));
+
                 db.Group.Add(group);
                 db.SaveChanges();
 
