@@ -78,6 +78,14 @@ namespace MyQuizBackend.Controllers
                 var GroupList = db.Group.Where(temp => DeviceGroupList.Any(temp2 => temp2.GroupId == temp.Id));
                 givenAnswerListForClient = db.GivenAnswer.Where(temp => GroupList.Any(temp2 => temp2.Id == temp.GroupId)).ToList();
             }
+
+            if (givenAnswerListForClient == null || !givenAnswerListForClient.Any()) return BadRequest("No data present!");
+
+            foreach (var givenAnswer in givenAnswerListForClient)
+            {
+                givenAnswer.fillValues();
+            }
+
             return Ok(JsonConvert.SerializeObject(givenAnswerListForClient));
         }
 
