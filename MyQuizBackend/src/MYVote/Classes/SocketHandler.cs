@@ -52,6 +52,7 @@ namespace MyQuizBackend.Classes
 
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
+                await Task.Delay(1000);
                 while(MessageQueue.Count > 0) {
                     var toSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(toSend);
