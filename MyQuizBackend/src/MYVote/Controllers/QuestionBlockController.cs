@@ -58,7 +58,7 @@ namespace MyQuizBackend.Controllers
         public IActionResult PostNewQuestionBlock([FromBody] JObject value)
         {
             var questionBlock = new QuestionBlock();
-            var existingQuestionBlock = new QuestionBlock();
+            QuestionBlock existingQuestionBlock;
             if (value == null) return BadRequest();
             try
             {
@@ -82,7 +82,7 @@ namespace MyQuizBackend.Controllers
             //QuestionBlock already exists in Database
             else
             {
-                removeQuestionBlockFromDatabase(existingQuestionBlock);
+                removeQuestionBlockFromDatabase(questionBlock);
                 saveNewQuestionBlockToDatabase(questionBlock);
             }
             return Ok(JsonConvert.SerializeObject(questionBlock));
@@ -111,7 +111,7 @@ namespace MyQuizBackend.Controllers
 
         #region LOGIC
 
-        public QuestionBlock saveNewQuestionBlockToDatabase(QuestionBlock questionBlock)
+        public static QuestionBlock saveNewQuestionBlockToDatabase(QuestionBlock questionBlock)
         {
             using (var db = new EF_DB_Context())
             {
