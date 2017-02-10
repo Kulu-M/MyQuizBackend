@@ -35,12 +35,12 @@ namespace MyQuizBackend.Controllers
 
             if (groupId != 0)
             {
-                givenAnswers = givenAnswers.Where(x => x.GroupId != groupId).ToList() ;
+                givenAnswers = givenAnswers.Where(x => x.GroupId == groupId).ToList() ;
             }
 
             if (singleTopicId != 0)
             {
-                givenAnswers = givenAnswers.Where(x => x.SingleTopicId != singleTopicId).ToList();
+                givenAnswers = givenAnswers.Where(x => x.SingleTopicId == singleTopicId).ToList();
             }
             foreach (var ga in givenAnswers)
             {
@@ -56,7 +56,7 @@ namespace MyQuizBackend.Controllers
             GivenAnswer givenAnswer;
             using (var db = new EF_DB_Context())
             {
-                givenAnswer = db.GivenAnswer.FirstOrDefault();
+                givenAnswer = db.GivenAnswer.FirstOrDefault(ga => ga.Id == id);
                 if (givenAnswer == null) return BadRequest("No data present!");
             }
             givenAnswer.fillValues();
@@ -78,6 +78,14 @@ namespace MyQuizBackend.Controllers
                 var GroupList = db.Group.Where(temp => DeviceGroupList.Any(temp2 => temp2.GroupId == temp.Id));
                 givenAnswerListForClient = db.GivenAnswer.Where(temp => GroupList.Any(temp2 => temp2.Id == temp.GroupId)).ToList();
             }
+
+            if (givenAnswerListForClient == null || !givenAnswerListForClient.Any()) return BadRequest("No data present!");
+
+            foreach (var givenAnswer in givenAnswerListForClient)
+            {
+                givenAnswer.fillValues();
+            }
+
             return Ok(JsonConvert.SerializeObject(givenAnswerListForClient));
         }
 
@@ -85,6 +93,7 @@ namespace MyQuizBackend.Controllers
 
         #region POST
 
+        // Client Answer input -> send to Supervisor
         // POST api/givenanswer
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdateGivenAnswer([FromBody] JObject value)
@@ -136,12 +145,37 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(givenAnswer));
         }
 
-        // POST api/start/{surveyTimeInSeconds}
-        [HttpPost("start/{seconds}")]
-        public IActionResult PublishGivenAnswerToClients(int seconds, [FromBody] JArray value)
+        // Jovan create new GA for Client
+        // POST api/start1
+        [HttpPost("start1")]
+        public IActionResult Publish1GivenAnswerToClients([FromBody] JObject value)
         {
-            if (seconds < 0) return BadRequest("No negative times possible!");
+            GivenAnswer newGivenAnswer;
+            if (value == null) return BadRequest("Empty body");
+            try
+            {
+                newGivenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString(),new JsonSerializerSettings(){NullValueHandling = NullValueHandling.Ignore});
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not deserialize!");
+            }
 
+            var rnd = new Random();
+
+            var surveyId = rnd.Next(1, int.MaxValue);
+
+            newGivenAnswer.SurveyId = surveyId;
+            saveGivenAnswerToDatabase(newGivenAnswer);
+
+            return Ok(JsonConvert.SerializeObject(newGivenAnswer));
+        }
+
+        // Patrick create new GA for Client
+        // POST api/start
+        [HttpPost("start")]
+        public IActionResult PublishGivenAnswerToClients([FromBody] JArray value)
+        {
             List<GivenAnswer> newGivenAnswers;
             if (value == null) return BadRequest("Empty body");
             try
@@ -152,32 +186,16 @@ namespace MyQuizBackend.Controllers
             {
                 return BadRequest("Could not deserialize!");
             }
-            // create random surveyId since AutoIncrement only work for the PrimaryKey in sqlite
-            // TODO: maybe check if surveyId exists in DB and create a new one if it does
+
             var rnd = new Random();
-            // id =1 and delete all from db so i can use the same id all the time while debugging
+            
             var surveyId = rnd.Next(1,int.MaxValue);
 
-            // using (var db = new EF_DB_Context())
-            // {
-            //     var gas = db.GivenAnswer.Where(x => x.SurveyId == surveyId);
-            //     foreach(var g in gas) {        
-            //         db.GivenAnswer.Remove(g);            
-            //         db.Entry(g).State = EntityState.Deleted;
-            //     }
-            //     db.SaveChanges();
-            // }
-
             foreach(var ga in newGivenAnswers) {
-                // Add surveyId to each GivenAnswer
                 ga.SurveyId = surveyId;
                 saveGivenAnswerToDatabase(ga);
             }
-
-            //publish these givenanswers to clients via push notification
-
-            // send GivenAnswers with added surveyId back to supervisor so he can create a websocket connection with this surveyId
-            // ws://localhost:5000/ws/{surveyId}
+           
             return Ok(JsonConvert.SerializeObject(newGivenAnswers));
         }
 
@@ -206,6 +224,11 @@ namespace MyQuizBackend.Controllers
 
         public void saveGivenAnswerToDatabase(GivenAnswer givenAnswer)
         {
+            if (givenAnswer.QuestionBlock.Id == 0)
+            {
+                givenAnswer.QuestionBlock = QuestionBlockController.saveNewQuestionBlockToDatabase(givenAnswer.QuestionBlock);
+            }
+
             using (var db = new EF_DB_Context())
             {
                 givenAnswer.fillIds();

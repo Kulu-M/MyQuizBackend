@@ -33,12 +33,15 @@ namespace MyQuizBackend.Classes
             _voteConnector.AddSocketHandler(_surveyId, this);
             // get timestamp for survey and set time to die respectively
             using (var db = new EF_DB_Context() ){
-                var timestamp = (from g in db.GivenAnswer where g.SurveyId == _surveyId select g.TimeStamp).First();
+                var timestamp = (from g in db.GivenAnswer where g.SurveyId == _surveyId && !string.IsNullOrWhiteSpace(g.TimeStamp) select g.TimeStamp).First();
                 var end = int.Parse(timestamp);
                 var now = Time.ConvertToUnixTimestamp(DateTime.Now);
                 var timeToDieInMilliseconds = (int)(end - now)*2000;
-                new Timer( _ => { 
+                new Timer( async _ => { 
                     _finished = true; 
+                    MessageQueue.Clear();
+                    await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None); 
+                    _voteConnector.RemoveSocketHandler(_surveyId);        
                     }, null, timeToDieInMilliseconds, Timeout.Infinite);                
             }            
         }
@@ -52,16 +55,16 @@ namespace MyQuizBackend.Classes
 
         private async Task EchoLoop() {
             while (socket.State == WebSocketState.Open) {
+                if(_finished) {  
+                    break;   
+                }
+                await Task.Delay(1000);
                 while(MessageQueue.Count > 0) {
                     var toSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(toSend);
-                }
-                if(_finished) 
-                    break;       
+                }  
             }
-            // Remove SocketHandler from VoteConnector after closing
-            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Timeout", CancellationToken.None);    
-            _voteConnector.RemoveSocketHandler(_surveyId);               
+            // Remove SocketHandler from VoteConnector after closing       
         }
 
         public async Task SendGivenAnswer(string json) {
