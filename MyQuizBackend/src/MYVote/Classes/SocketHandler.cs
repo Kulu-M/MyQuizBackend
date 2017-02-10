@@ -42,7 +42,7 @@ namespace MyQuizBackend.Classes
 
             var endTime = InitObject.TimeStamp;
             var nowTime = Time.ConvertToUnixTimestamp(DateTime.Now);
-            var timeToDieInMilliseconds = (int)(endTime - nowTime) * 1000 + 5000;
+            var timeToDieInMilliseconds = (int)(endTime - nowTime) * 1000;
             Console.WriteLine($"Time to Die {timeToDieInMilliseconds / 1000} seconds");
             if(timeToDieInMilliseconds < 0) throw new Exception($"Time is too low: {timeToDieInMilliseconds} => SurveyId: {InitObject.SurveyId}");
             
@@ -59,6 +59,7 @@ namespace MyQuizBackend.Classes
                     var messageToSend = MessageQueue.Dequeue();
                     await SendGivenAnswer(messageToSend); 
                 }
+                await Task.Delay(100);
             }
             await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
             _voteConnector.RemoveSocketHandler(InitObject.SurveyId);
