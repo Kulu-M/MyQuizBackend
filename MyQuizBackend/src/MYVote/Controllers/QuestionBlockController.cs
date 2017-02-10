@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MYVote.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -49,7 +50,7 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        #endregion GET
+        #endregion
 
         #region POST
 
@@ -88,7 +89,58 @@ namespace MyQuizBackend.Controllers
             return Ok(JsonConvert.SerializeObject(questionBlock));
         }
         
-        #endregion POST
+        #endregion
+
+        #region UPDATE
+
+        [HttpPut]
+        public IActionResult UpdateQuestionsInQuestionBlock([FromBody] JObject value)
+        {
+            var questionBlock = new QuestionBlock();
+            QuestionBlock existingQuestionBlock;
+            if (value == null) return BadRequest();
+            try
+            {
+                questionBlock = JsonConvert.DeserializeObject<QuestionBlock>(value.ToString());
+            }
+            catch (Exception)
+            {
+               return BadRequest("Could not deserialize!");
+            }
+            
+            using (var db = new EF_DB_Context())
+            {
+                existingQuestionBlock = db.QuestionBlock.Where(qb => qb.Id == questionBlock.Id).FirstOrDefault();
+                if (existingQuestionBlock == null)              
+                    return BadRequest("Questionblock does not exist");
+            }
+
+            using (var db = new EF_DB_Context())
+            {
+                var currentQuestionQuestionBlockRelations =
+                    from q in db.QuestionQuestionBlock
+                    where q.QuestionBlockId == questionBlock.Id
+                    select q;
+
+                //Delete from QuestionQuestionBlock
+                db.QuestionQuestionBlock.RemoveRange(currentQuestionQuestionBlockRelations);                
+
+                db.SaveChanges();
+
+                foreach(var q in questionBlock.Questions) {
+                    db.QuestionQuestionBlock.Add(new QuestionQuestionBlock {
+                        QuestionId = q.Id,
+                        QuestionBlockId = questionBlock.Id
+                    });
+                }
+                db.SaveChanges();                
+                
+            }
+          
+            return Ok(JsonConvert.SerializeObject(questionBlock));
+        }
+
+        #endregion
 
         #region DELETE
 
@@ -107,7 +159,7 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        #endregion DELETE
+        #endregion
 
         #region LOGIC
 
@@ -183,6 +235,6 @@ namespace MyQuizBackend.Controllers
             }
         }
 
-        #endregion LOGIC
+        #endregion
     }
 }
