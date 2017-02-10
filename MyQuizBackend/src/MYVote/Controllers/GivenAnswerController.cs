@@ -124,12 +124,10 @@ namespace MyQuizBackend.Controllers
                         // Get socketHandler for specific surveyId
                         var surveyId = (int)givenAnswer.SurveyId;
                         var socketHandler = _voteConnector.GetSocketHandlers()[surveyId];
-                        // TODO: remove, this is for debug because is dont send full objects
                         givenAnswer.fillIds();
                         givenAnswer.fillValues();
-                        // Send the new givenAnswer to WebSocketClient (Supervisor Application)
 
-                        if(!socketHandler._finished)
+                        if(!socketHandler.tokenSource.IsCancellationRequested)
                             socketHandler.MessageQueue.Enqueue(JsonConvert.SerializeObject(givenAnswer));
                     } catch (Exception) {
                         return BadRequest("There is no survey with this ID currently");
@@ -174,29 +172,31 @@ namespace MyQuizBackend.Controllers
         // Patrick create new GA for Client
         // POST api/start
         [HttpPost("start")]
-        public IActionResult PublishGivenAnswerToClients([FromBody] JArray value)
+        public IActionResult PublishGivenAnswerToClients([FromBody] JObject value)
         {
-            List<GivenAnswer> newGivenAnswers;
+            GivenAnswer newGivenAnswer;
             if (value == null) return BadRequest("Empty body");
             try
             {
-                newGivenAnswers = JsonConvert.DeserializeObject<List<GivenAnswer>>(value.ToString());
+                newGivenAnswer = JsonConvert.DeserializeObject<GivenAnswer>(value.ToString());
             }
             catch (Exception)
             {
                 return BadRequest("Could not deserialize!");
             }
 
-            var rnd = new Random();
-            
-            var surveyId = rnd.Next(1,int.MaxValue);
+            var rnd = new Random();            
+            var surveyId = rnd.Next(1,100);
+            newGivenAnswer.SurveyId = surveyId;
 
-            foreach(var ga in newGivenAnswers) {
-                ga.SurveyId = surveyId;
-                saveGivenAnswerToDatabase(ga);
+            using (var db = new EF_DB_Context())
+            {
+                newGivenAnswer.fillIds();                
+                db.GivenAnswer.Add(newGivenAnswer);
+                db.SaveChanges();
             }
            
-            return Ok(JsonConvert.SerializeObject(newGivenAnswers));
+            return Ok(JsonConvert.SerializeObject(newGivenAnswer));
         }
 
         #endregion POST
